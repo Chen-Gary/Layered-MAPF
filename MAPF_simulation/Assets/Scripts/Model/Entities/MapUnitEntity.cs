@@ -12,7 +12,7 @@ public class MapUnitEntity {
         BARRIER
     }
 
-    public MapUnitType type { get; set; }   //should be private set
+    public MapUnitType type { get; set; }
 
     public MapUnitEntity(MapUnitType type = MapUnitType.NONE) {
         this.type = type;

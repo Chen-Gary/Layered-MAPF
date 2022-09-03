@@ -45,7 +45,7 @@ public class GlobalGridView : MonoBehaviour {
                 m_gridEntityViews[x, y] = Instantiate(_prefab, _container);
                 m_gridEntityViews[x, y].transform.position = new Vector3(x * GridEntityView.CELL_SIZE, 0f, y * GridEntityView.CELL_SIZE);
 
-                // 2. Render "static" graphic each `GridEntityView`
+                // 2. Render "static" graphic for each `GridEntityView`
                 m_gridEntityViews[x, y]._coordText.text = GridEntityView.FormatCoordText(x, y);
                 m_gridEntityViews[x, y].RenderMap(m_globalGrid.gridMap[x, y].type);
             }
