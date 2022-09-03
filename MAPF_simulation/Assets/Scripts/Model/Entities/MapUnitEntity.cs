@@ -8,10 +8,11 @@ public class MapUnitEntity {
         GOODS_SHELF, 
         GOODS_AREA, 
         CONVEYOR, 
-        PUBLIC_ROAD
+        PUBLIC_ROAD,
+        BARRIER
     }
 
-    public MapUnitType type;
+    public MapUnitType type { get; set; }   //should be private set
 
     public MapUnitEntity(MapUnitType type = MapUnitType.NONE) {
         this.type = type;

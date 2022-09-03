@@ -10,7 +10,7 @@ public class RobotEntity
         FREIGHT
     }
 
-    public RobotType type;
+    public RobotType type { get; set; }   //should be private set
 
     public RobotEntity(RobotType type = RobotType.NONE) {
         this.type = type;

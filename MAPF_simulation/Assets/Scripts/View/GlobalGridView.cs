@@ -20,24 +20,42 @@ public class GlobalGridView : MonoBehaviour {
         this.m_globalGrid = globalGrid_;
 
         _InitIfNot();
+        _RefreshView();
     }
 
     private void _InitIfNot() {
         if (m_hasInit) { return; }
         m_hasInit = true;
 
+        // error check
         if (m_globalGrid == null) {
             Debug.LogError("[GlobalGridView] m_globalGrid == null, when init");
             return;
         }
+        if (m_gridEntityViews != null) {
+            Debug.LogError("[GlobalGridView] m_gridEntityViews != null, when init");
+            return;
+        }
 
-        // instantiate all `GridEntityView`
+        // init
         m_gridEntityViews = new GridEntityView[m_globalGrid.dimX, m_globalGrid.dimY];
         for (int x = 0; x < m_globalGrid.dimX; x++) {
             for (int y = 0; y < m_globalGrid.dimY; y++) {
+                // 1. instantiate each `GridEntityView`
                 m_gridEntityViews[x, y] = Instantiate(_prefab, _container);
                 m_gridEntityViews[x, y].transform.position = new Vector3(x * GridEntityView.CELL_SIZE, 0f, y * GridEntityView.CELL_SIZE);
+
+                // 2. Render "static" graphic each `GridEntityView`
                 m_gridEntityViews[x, y]._coordText.text = GridEntityView.FormatCoordText(x, y);
+                m_gridEntityViews[x, y].RenderMap(m_globalGrid.gridMap[x, y].type);
+            }
+        }
+    }
+
+    private void _RefreshView() {
+        for (int x = 0; x < m_globalGrid.dimX; x++) {
+            for (int y = 0; y < m_globalGrid.dimY; y++) {
+                m_gridEntityViews[x, y].RenderRobot(m_globalGrid.gridRobot[x, y].type);
             }
         }
     }
