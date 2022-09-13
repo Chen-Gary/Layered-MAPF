@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapUnitEntity {
-    public enum MapUnitType {
-        NONE,
-        GOODS_SHELF, 
-        GOODS_AREA, 
-        CONVEYOR, 
-        PUBLIC_ROAD,
-        BARRIER
-    }
+namespace MAPF {
+    public class MapUnitEntity {
+        public enum MapUnitType {
+            NONE,
+            GOODS_SHELF, 
+            GOODS_AREA, 
+            CONVEYOR, 
+            PUBLIC_ROAD,
+            BARRIER
+        }
 
-    public MapUnitType type { get; set; }
+        public MapUnitType type { get; set; }
 
-    public MapUnitEntity(MapUnitType type = MapUnitType.NONE) {
-        this.type = type;
+        public MapUnitEntity(MapUnitType type = MapUnitType.NONE) {
+            this.type = type;
+        }
     }
 }
