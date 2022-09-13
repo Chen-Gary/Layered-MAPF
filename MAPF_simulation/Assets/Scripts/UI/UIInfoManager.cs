@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace MAPF {
+namespace MAPF.UI {
     /// <summary>
     /// Combines View and ViewModel
     /// </summary>

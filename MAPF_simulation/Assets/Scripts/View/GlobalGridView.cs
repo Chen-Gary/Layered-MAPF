@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MAPF { 
+namespace MAPF.View { 
     public class GlobalGridView : MonoBehaviour {
         [SerializeField]
         private GridEntityView _prefab = null;

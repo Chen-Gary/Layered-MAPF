@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using MAPF.UI;
+using MAPF.View;
+
 namespace MAPF { 
     public class SimulationEntry : MonoBehaviour {
         [SerializeField]

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace MAPF {
+namespace MAPF.View {
     public class GridEntityView : MonoBehaviour {
         #region Const
         public static readonly float CELL_SIZE = 1f;
