@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace MAPF {
     public class GlobalGrid {
+
+        public static GlobalGrid _instance;
+
         public MapUnitEntity[,] gridMap;
         public RobotEntity[,] gridRobot;
 
@@ -11,6 +14,12 @@ namespace MAPF {
         public int dimY = 0;
 
         public GlobalGrid(int dimX_, int dimY_) {
+            if (_instance != null) {
+                Debug.LogError("[GlobalGrid] singleton constructed more than once");
+                return;
+            }
+            _instance = this;
+
             this.dimX = dimX_;
             this.dimY = dimY_;
 
@@ -70,17 +79,17 @@ namespace MAPF {
             _FillRectangleInGridMap(16, 2, 3, 11, MapUnitEntity.MapUnitType.CONVEYOR);
 
             // set gird robot
-            var xFetchRobotCoord = new int[] { 1, 1, 1, 7, 7, 7, 13, 13, 13 };
-            var yFetchRobotCoord = new int[] { 11, 8, 3, 11, 8, 3, 11, 8, 3 };
-            for (int i = 0; i < xFetchRobotCoord.Length; i++) {
-                gridRobot[xFetchRobotCoord[i], yFetchRobotCoord[i]].type = RobotEntity.RobotType.FETCH;
-            }
+            //var xFetchRobotCoord = new int[] { 1, 1, 1, 7, 7, 7, 13, 13, 13 };
+            //var yFetchRobotCoord = new int[] { 11, 8, 3, 11, 8, 3, 11, 8, 3 };
+            //for (int i = 0; i < xFetchRobotCoord.Length; i++) {
+            //    gridRobot[xFetchRobotCoord[i], yFetchRobotCoord[i]].type = RobotEntity.RobotType.FETCH;
+            //}
 
-            var xFreightRobotCoord = new int[] { 2, 2, 2, 8, 8, 8, 15, 15, 15 };
-            var yFreightRobotCoord = new int[] { 11, 8, 3, 11, 8, 3, 11, 8, 3 };
-            for (int i = 0; i < xFreightRobotCoord.Length; i++) {
-                gridRobot[xFreightRobotCoord[i], yFreightRobotCoord[i]].type = RobotEntity.RobotType.FREIGHT;
-            }
+            //var xFreightRobotCoord = new int[] { 2, 2, 2, 8, 8, 8, 15, 15, 15 };
+            //var yFreightRobotCoord = new int[] { 11, 8, 3, 11, 8, 3, 11, 8, 3 };
+            //for (int i = 0; i < xFreightRobotCoord.Length; i++) {
+            //    gridRobot[xFreightRobotCoord[i], yFreightRobotCoord[i]].type = RobotEntity.RobotType.FREIGHT;
+            //}
         }
         #endregion
     }
