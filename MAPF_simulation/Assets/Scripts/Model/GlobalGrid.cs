@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
 
 namespace MAPF {
     public class GlobalGrid {
@@ -13,21 +15,20 @@ namespace MAPF {
         public int dimX = 0;
         public int dimY = 0;
 
-        public GlobalGrid(int dimX_, int dimY_) {
+        public GlobalGrid() {
             if (_instance != null) {
                 Debug.LogError("[GlobalGrid] singleton constructed more than once");
                 return;
             }
             _instance = this;
 
-            this.dimX = dimX_;
-            this.dimY = dimY_;
-
+            this.dimX = 0;
+            this.dimY = 0;
             gridMap = null;
             gridRobot = null;
         }
 
-        #region Populate Grid
+        #region Populate Grid with Code
         private void _FillRectangleInGridMap(int xLowLeft, int yLowLeft, 
                                              int xOffset, int yOffset,
                                              MapUnitEntity.MapUnitType type) {
@@ -49,10 +50,8 @@ namespace MAPF {
         ///     TODO: Dimension 76 * 48
         /// </summary>
         public void Populate_debug_v1() {
-            if (dimX != 20 || dimY != 15) {
-                Debug.LogError("[GlobalGrid] dimension mismatch when populate the map");
-                return;
-            }
+            dimX = 20;
+            dimY = 15;
             gridMap = new MapUnitEntity[dimX, dimY];
             gridRobot = new RobotEntity[dimX, dimY];
 
@@ -90,6 +89,47 @@ namespace MAPF {
             //for (int i = 0; i < xFreightRobotCoord.Length; i++) {
             //    gridRobot[xFreightRobotCoord[i], yFreightRobotCoord[i]].type = RobotEntity.RobotType.FREIGHT;
             //}
+        }
+        #endregion
+
+        #region Populate Grid with Json
+        public void PopulateWithJson(string filename) {
+            Dictionary<int, MapUnitEntity.MapUnitType> int2MapUnitType = 
+                new Dictionary<int, MapUnitEntity.MapUnitType>() {
+                    { 0, MapUnitEntity.MapUnitType.PUBLIC_ROAD },
+                    { 1, MapUnitEntity.MapUnitType.BARRIER }
+                };
+
+            string path = Path.Combine(Application.dataPath, "Convertor", "json", filename + ".json");
+            if (!File.Exists(path)) {
+                Debug.LogError("[GlobalGrid] PopulateWithJson : file not found");
+                return;
+            }
+            string gridMapJson = File.ReadAllText(path);
+            int[,] gridMapIntArr = JsonConvert.DeserializeObject<int[,]>(gridMapJson);
+
+            dimX = gridMapIntArr.GetLength(0);
+            dimY = gridMapIntArr.GetLength(1);
+            gridMap = new MapUnitEntity[dimX, dimY];
+            gridRobot = new RobotEntity[dimX, dimY];
+
+            // init
+            for (int x = 0; x < dimX; x++) {
+                for (int y = 0; y < dimY; y++) {
+                    this.gridMap[x, y] = new MapUnitEntity(MapUnitEntity.MapUnitType.PUBLIC_ROAD);
+                    this.gridRobot[x, y] = new RobotEntity(RobotEntity.RobotType.NONE);
+                }
+            }
+
+            for (int i = 0; i < dimX; i++) {
+                for (int j = 0; j < dimY; j++) {
+                    int entry = gridMapIntArr[i, j];
+                    gridMap[i, j].type = int2MapUnitType[entry];
+                }
+            }
+
+            Debug.Log(string.Format("[GlobalGrid] json map loaded with dimension [dimX, dimY] = [{0}, {1}]", 
+                dimX.ToString(), dimY.ToString()));
         }
         #endregion
     }

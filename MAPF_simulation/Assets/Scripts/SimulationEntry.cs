@@ -17,8 +17,9 @@ namespace MAPF {
         #region Unity Callbacks
         private void Start() {
             // construct `m_globalGrid`
-            m_globalGrid = new GlobalGrid(20, 15);
-            m_globalGrid.Populate_debug_v1();
+            m_globalGrid = new GlobalGrid();
+            //m_globalGrid.Populate_debug_v1();
+            m_globalGrid.PopulateWithJson("Map1");
 
             // render
             _globalGridView.Render(m_globalGrid);
@@ -26,8 +27,8 @@ namespace MAPF {
 
             //test A*
             //RobotEntity robot = new RobotEntity(RobotEntity.RobotType.FREIGHT);
-            Utils.AStar algorithm = new Utils.AStar(GlobalGrid._instance.gridMap);
-            algorithm.FindPath(new Utils.AStar.Coord(1, 5), new Utils.AStar.Coord(7, 8));
+            //Utils.AStar algorithm = new Utils.AStar(GlobalGrid._instance.gridMap);
+            //algorithm.FindPath(new Utils.AStar.Coord(1, 5), new Utils.AStar.Coord(7, 8));
         }
 
         private void Update() {
