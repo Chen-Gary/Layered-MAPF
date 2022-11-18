@@ -14,6 +14,35 @@ namespace MAPF {
 
         private GlobalGrid m_globalGrid;
 
+        private bool m_keepSimulation = true;
+
+
+        private void _OneSimulationPass() {
+            _uiInfoManager.Render(1);
+
+            // for all robot
+            List<FreightRobot> robots = new List<FreightRobot>();
+            for (int x = 0; x < m_globalGrid.dimX; x++) {
+                for (int y = 0; y < m_globalGrid.dimY; y++) {
+                    if (m_globalGrid.gridRobot[x, y].type == RobotEntity.RobotType.FREIGHT)
+                        robots.Add((FreightRobot)m_globalGrid.gridRobot[x, y]);
+                }
+            }
+            for (int i = 0; i < robots.Count; i++) {
+                robots[i].Operate();
+            }
+
+            // rerender view
+            _globalGridView.Render(m_globalGrid);
+        }
+
+        private IEnumerator _SimulationLoop() {
+            while(m_keepSimulation) {
+                yield return new WaitForSeconds(1f);
+                _OneSimulationPass();
+            }
+        }
+
         #region Unity Callbacks
         private void Start() {
             // construct `m_globalGrid`
@@ -25,26 +54,16 @@ namespace MAPF {
             // render
             _globalGridView.Render(m_globalGrid);
             _uiInfoManager.Render(0);
+
+
+            // start simulaation
+            StartCoroutine(_SimulationLoop());
         }
 
         private void Update() {
             if (Input.GetKeyDown(KeyCode.D)) {
-                _uiInfoManager.Render(1);
-
-                // for all robot
-                List<FreightRobot> robots = new List<FreightRobot>();
-                for (int x = 0; x < m_globalGrid.dimX; x++) {
-                    for (int y = 0; y < m_globalGrid.dimY; y++) {
-                        if (m_globalGrid.gridRobot[x, y].type == RobotEntity.RobotType.FREIGHT)
-                            robots.Add((FreightRobot) m_globalGrid.gridRobot[x, y]);
-                    }
-                }
-                for (int i = 0; i < robots.Count; i++) {
-                    robots[i].Operate();
-                }
-
-                // rerender view
-                _globalGridView.Render(m_globalGrid);
+                m_keepSimulation = false;
+                Debug.Log("[SimulationEntry] manually trigger");
             }
         }
         #endregion

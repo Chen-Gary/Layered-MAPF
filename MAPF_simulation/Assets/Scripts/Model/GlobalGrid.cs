@@ -70,6 +70,8 @@ namespace MAPF {
 
             // TODO: randomly generate tasks
             GlobalTaskQueue.Enqueue(new Task(2, 6));
+            GlobalTaskQueue.Enqueue(new Task(12, 11));
+            GlobalTaskQueue.Enqueue(new Task(16, 3));
         }
 
         public bool RequestTask(out Task nextTask) {

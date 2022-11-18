@@ -24,6 +24,17 @@ namespace MAPF.Utils {
             return !((l.x == r.x) && (l.y == r.y));
         }
 
+        public override bool Equals(object o) {
+            if (o == null) return false;
+
+            var right = o as Coord;
+            return (this.x == right.x) && (this.y == right.y);
+        }
+
+        public override int GetHashCode() {
+            return base.GetHashCode();
+        }
+
         public static int ManhattanDistance(Coord l, Coord r) {
             int manhattanDistance = Mathf.Abs(l.x - r.x) + Mathf.Abs(l.y - r.y);
             return manhattanDistance;

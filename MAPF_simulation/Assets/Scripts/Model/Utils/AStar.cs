@@ -85,11 +85,11 @@ namespace MAPF.Utils {
             path.Reverse();
 
             // debug: print path
-            string pathStr = "[Astar] path: ";
-            foreach (Coord coord in path) {
-                pathStr += coord.ToString() + " -> ";
-            }
-            Debug.Log(pathStr);
+            //string pathStr = "[Astar] path: ";
+            //foreach (Coord coord in path) {
+            //    pathStr += coord.ToString() + " -> ";
+            //}
+            //Debug.Log(pathStr);
 
             return path;
         }
