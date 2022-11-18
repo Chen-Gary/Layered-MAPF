@@ -3,3 +3,6 @@
 
 /json/*.json
 /json/*.json.meta
+
+/task_set/*.json
+/task_set/*.json.meta

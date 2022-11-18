@@ -44,6 +44,8 @@ namespace MAPF.Convertor {
             int[][] arrOfTask = listOfTask.Select(pos => pos.ToArray()).ToArray();
             var arrOfTaskJson = JsonConvert.SerializeObject(arrOfTask);
             File.WriteAllText(pathOut, arrOfTaskJson);
+
+            Debug.Log($"<color=#00FF00>All nice done!</color>");
         }
     }
 
