@@ -5,15 +5,21 @@ using UnityEngine;
 using Newtonsoft.Json;
 
 namespace MAPF {
+    /// <summary>
+    /// Cloud in the cloud-edge-terminal architecture
+    /// 全局控制中心
+    /// </summary>
     public class GlobalGrid {
 
-        public static GlobalGrid _instance;
+        public static GlobalGrid _instance;     //singleton
 
         public MapUnitEntity[,] gridMap;
         public RobotEntity[,] gridRobot;
 
         public int dimX = 0;
         public int dimY = 0;
+
+        Queue<Task> GlobalTaskQueue;
 
         public GlobalGrid() {
             if (_instance != null) {
@@ -26,7 +32,28 @@ namespace MAPF {
             this.dimY = 0;
             gridMap = null;
             gridRobot = null;
+
+            InitTaskQueue();
         }
+
+        #region Task Assignment
+        private void InitTaskQueue() {
+            GlobalTaskQueue = new Queue<Task>();
+
+            // TODO: randomly generate tasks
+            GlobalTaskQueue.Enqueue(new Task(2, 6));
+        }
+
+        public bool RequestTask(out Task nextTask) {
+            if (GlobalTaskQueue.Count == 0) {
+                nextTask = null;
+                return false;
+            } else {
+                nextTask = GlobalTaskQueue.Dequeue();
+                return true;
+            }
+        }
+        #endregion
 
         #region Populate Grid with Code
         private void _FillRectangleInGridMap(int xLowLeft, int yLowLeft, 
@@ -142,9 +169,11 @@ namespace MAPF {
             string arrOfPosJson = File.ReadAllText(path);
             int[][] arrOfPos = JsonConvert.DeserializeObject<int[][]>(arrOfPosJson);
 
+            int robotPriority = 1;
             foreach(int[] pos in arrOfPos) {
                 // `new RobotEntity` here, instead of just change the `RobotType`
-                gridRobot[pos[0], pos[1]] = new FreightRobot();
+                gridRobot[pos[0], pos[1]] = new FreightRobot(robotPriority);
+                robotPriority++;
             }
         }
         #endregion
