@@ -80,7 +80,7 @@ namespace MAPF {
                 return false;
             } else {
                 nextTask = GlobalTaskQueue.Dequeue();
-                Debug.Log(string.Format("[GlobalGrid] task[{0}] is assigned to robot", nextTask.ToString()));
+                Debug.Log(string.Format("[GlobalGrid] task={0} is assigned to robot", nextTask.targetPos.ToString()));
                 return true;
             }
         }
