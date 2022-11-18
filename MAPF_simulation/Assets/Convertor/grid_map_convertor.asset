@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 599d6e338390e4141aae6a3da73fe4cf, type: 3}
   m_Name: grid_map_convertor
   m_EditorClassIdentifier: 
-  CsvFileName: Map1
+  MapCsvFileName: Map1
+  RobotCsvFileName: Bot1

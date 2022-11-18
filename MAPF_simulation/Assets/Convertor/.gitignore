@@ -1,0 +1,5 @@
+/csv/*.csv
+/csv/*.csv.meta
+
+/json/*.json
+/json/*.json.meta

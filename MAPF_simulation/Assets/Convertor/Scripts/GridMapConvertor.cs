@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,11 +11,20 @@ namespace MAPF.Convertor {
     [CreateAssetMenu(menuName = "Convertor/GridMapConvertor")]
     public class GridMapConvertor : ScriptableObject {
         [SerializeField]
-        private string CsvFileName = null;
+        private string MapCsvFileName = null;
+        [SerializeField]
+        private string RobotCsvFileName = null;
 
         public void Convert() {
-            string pathIn = Path.Combine(Application.dataPath, "Convertor", "csv", CsvFileName + ".csv");
-            string pathOut = Path.Combine(Application.dataPath, "Convertor", "json", CsvFileName + ".json");
+            ConvertMap();
+            ConvertRobotPos();
+
+            Debug.Log($"<color=#00FF00>All nice done!</color>");
+        }
+
+        private void ConvertMap() {
+            string pathIn = Path.Combine(Application.dataPath, "Convertor", "csv", MapCsvFileName + ".csv");
+            string pathOut = Path.Combine(Application.dataPath, "Convertor", "json", MapCsvFileName + ".json");
             string[] lines = File.ReadAllLines(pathIn);
 
             int dimY = lines.Length;                //row index -> Y
@@ -36,8 +46,28 @@ namespace MAPF.Convertor {
             }
             var gridMapJson = JsonConvert.SerializeObject(gridMap);
             File.WriteAllText(pathOut, gridMapJson);
+        }
 
-            Debug.Log($"<color=#00FF00>All nice done!</color>");
+        private void ConvertRobotPos() {
+            string pathIn = Path.Combine(Application.dataPath, "Convertor", "csv", RobotCsvFileName + ".csv");
+            string pathOut = Path.Combine(Application.dataPath, "Convertor", "json", RobotCsvFileName + ".json");
+            string[] lines = File.ReadAllLines(pathIn);
+
+            int maxY = lines.Length;
+            int maxX = lines[0].Split(',').Length;
+
+            List<List<int>> listOfPos = new List<List<int>>();
+            for (int j = 0; j < maxY; j++) {
+                string[] columns = lines[j].Split(',');
+                for (int i = 0; i < maxX; i++) {
+                    if (columns[i] == "R") {
+                        listOfPos.Add(new List<int> { i, j });
+                    }
+                }
+            }
+            int[][] arrOfPos = listOfPos.Select(pos => pos.ToArray()).ToArray();
+            var arrOfPosJson = JsonConvert.SerializeObject(arrOfPos);
+            File.WriteAllText(pathOut, arrOfPosJson);
         }
     }
 
