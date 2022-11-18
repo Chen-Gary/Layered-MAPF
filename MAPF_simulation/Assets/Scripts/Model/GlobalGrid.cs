@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
+using MAPF.Utils;
+
 
 namespace MAPF {
     /// <summary>
@@ -36,6 +38,32 @@ namespace MAPF {
             InitTaskQueue();
         }
 
+        #region Robot
+        public bool UpdateRobotPos(RobotEntity robot, Coord nextPos) {
+            Coord currentPos = robot.position;
+            // if `currentPos` is consistent with `gridRobot`
+            if (robot != gridRobot[currentPos.x, currentPos.y]) {   //they should be the same instance
+                Debug.LogError("[GlobalGrid] currentPos of robot is inconsistent with `gridRobot`");
+                return false;
+            }
+            // if nextPos is valid
+            if (gridRobot[nextPos.x, nextPos.y].type != RobotEntity.RobotType.NONE) {
+                Debug.LogWarning(string.Format("[GlobalGrid] the position intended to move {0} to is already occupied", nextPos.ToString()));
+                return false;
+            }
+            if (!gridMap[nextPos.x, nextPos.y].canEnter) {
+                Debug.LogError("[GlobalGrid] the position intended to move to cannot be entered");
+                return false;
+            }
+
+            // update `gridRobot`
+            gridRobot[currentPos.x, currentPos.y] = new RobotEntity(RobotEntity.RobotType.NONE, 
+                                                                    new Coord(currentPos.x, currentPos.y));
+            gridRobot[nextPos.x, nextPos.y] = robot;
+            return true;
+        }
+        #endregion
+
         #region Task Assignment
         private void InitTaskQueue() {
             GlobalTaskQueue = new Queue<Task>();
@@ -50,6 +78,7 @@ namespace MAPF {
                 return false;
             } else {
                 nextTask = GlobalTaskQueue.Dequeue();
+                Debug.Log(string.Format("[GlobalGrid] task[{0}] is assigned to robot", nextTask.ToString()));
                 return true;
             }
         }
@@ -86,7 +115,7 @@ namespace MAPF {
             for (int x = 0; x < dimX; x++) {
                 for (int y = 0; y < dimY; y++) {
                     this.gridMap[x, y] = new MapUnitEntity(MapUnitEntity.MapUnitType.PUBLIC_ROAD);
-                    this.gridRobot[x, y] = new RobotEntity(RobotEntity.RobotType.NONE);
+                    this.gridRobot[x, y] = new RobotEntity(RobotEntity.RobotType.NONE, new Coord(x, y));
                 }
             }
 
@@ -144,7 +173,7 @@ namespace MAPF {
             for (int x = 0; x < dimX; x++) {
                 for (int y = 0; y < dimY; y++) {
                     this.gridMap[x, y] = new MapUnitEntity(MapUnitEntity.MapUnitType.PUBLIC_ROAD);
-                    this.gridRobot[x, y] = new RobotEntity(RobotEntity.RobotType.NONE);
+                    this.gridRobot[x, y] = new RobotEntity(RobotEntity.RobotType.NONE, new Coord(x, y));
                 }
             }
 
@@ -172,7 +201,7 @@ namespace MAPF {
             int robotPriority = 1;
             foreach(int[] pos in arrOfPos) {
                 // `new RobotEntity` here, instead of just change the `RobotType`
-                gridRobot[pos[0], pos[1]] = new FreightRobot(robotPriority);
+                gridRobot[pos[0], pos[1]] = new FreightRobot(new Coord(pos[0], pos[1]), robotPriority);
                 robotPriority++;
             }
         }

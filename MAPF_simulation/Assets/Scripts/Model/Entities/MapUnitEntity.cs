@@ -13,6 +13,11 @@ namespace MAPF {
         }
 
         public MapUnitType type { get; set; }
+        public bool canEnter {
+            get {
+                return this.type == MapUnitType.PUBLIC_ROAD;
+            }
+        }
 
         public MapUnitEntity(MapUnitType type = MapUnitType.NONE) {
             this.type = type;

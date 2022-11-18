@@ -34,14 +34,14 @@ namespace MAPF.Utils {
             
             for (int x = 0; x < dimX; x++) {
                 for (int y = 0; y < dimY; y++) {
-                    bool canEnter = gridMap[x, y].type == MapUnitEntity.MapUnitType.PUBLIC_ROAD;
+                    bool canEnter = gridMap[x, y].canEnter;
                     Node node = new Node(new Coord(x, y), canEnter);
                     graph[x, y] = node;
                 }
             }
         }
 
-        public void FindPath(Coord startPos, Coord goalPos) {
+        public List<Coord> FindPath(Coord startPos, Coord goalPos) {
             Node start = graph[startPos.x, startPos.y];
             Node goal = graph[goalPos.x, goalPos.y];
 
@@ -81,20 +81,24 @@ namespace MAPF.Utils {
                 path.Add(bufferNode.pos);
                 bufferNode = came_from[bufferNode];
             }
-            path.Add(start.pos);
+            //path.Add(start.pos);  //`startPos` is not included in the path
             path.Reverse();
 
-            // output
+            // debug: print path
+            string pathStr = "[Astar] path: ";
             foreach (Coord coord in path) {
-                Debug.Log(coord.ToString());
+                pathStr += coord.ToString() + " -> ";
             }
+            Debug.Log(pathStr);
+
+            return path;
         }
 
         /// <summary>
         /// Manhattan distance
         /// </summary>
         private float heuristic(Node src, Node dst) {
-            int manhattan_distance = Mathf.Abs(src.pos.x - dst.pos.x) + Mathf.Abs(src.pos.y - dst.pos.y);
+            int manhattan_distance = Coord.ManhattanDistance(src.pos, dst.pos);
             return (float)manhattan_distance;
         }
 

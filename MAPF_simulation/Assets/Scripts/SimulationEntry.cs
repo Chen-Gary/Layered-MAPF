@@ -25,16 +25,24 @@ namespace MAPF {
             // render
             _globalGridView.Render(m_globalGrid);
             _uiInfoManager.Render(0);
-
-            //test A*
-            //RobotEntity robot = new RobotEntity(RobotEntity.RobotType.FREIGHT);
-            //Utils.AStar algorithm = new Utils.AStar(GlobalGrid._instance.gridMap);
-            //algorithm.FindPath(new Utils.AStar.Coord(1, 5), new Utils.AStar.Coord(7, 8));
         }
 
         private void Update() {
             if (Input.GetKeyDown(KeyCode.D)) {
                 _uiInfoManager.Render(1);
+
+                // for all robot
+                List<FreightRobot> robots = new List<FreightRobot>();
+                for (int x = 0; x < m_globalGrid.dimX; x++) {
+                    for (int y = 0; y < m_globalGrid.dimY; y++) {
+                        if (m_globalGrid.gridRobot[x, y].type == RobotEntity.RobotType.FREIGHT)
+                            robots.Add((FreightRobot) m_globalGrid.gridRobot[x, y]);
+                    }
+                }
+                for (int i = 0; i < robots.Count; i++) {
+                    robots[i].Operate();
+                }
+
                 // rerender view
                 _globalGridView.Render(m_globalGrid);
             }
