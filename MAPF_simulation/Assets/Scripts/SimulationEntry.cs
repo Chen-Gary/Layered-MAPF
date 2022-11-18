@@ -19,7 +19,8 @@ namespace MAPF {
             // construct `m_globalGrid`
             m_globalGrid = new GlobalGrid();
             //m_globalGrid.Populate_debug_v1();
-            m_globalGrid.PopulateWithJson("Map1");
+            m_globalGrid.PopulateMapWithJson("Map1");
+            m_globalGrid.PopulateRobotWithJson("Bot1");
 
             // render
             _globalGridView.Render(m_globalGrid);

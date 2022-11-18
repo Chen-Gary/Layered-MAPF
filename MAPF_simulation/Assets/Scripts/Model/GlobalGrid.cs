@@ -93,7 +93,7 @@ namespace MAPF {
         #endregion
 
         #region Populate Grid with Json
-        public void PopulateWithJson(string filename) {
+        public void PopulateMapWithJson(string filename) {
             Dictionary<int, MapUnitEntity.MapUnitType> int2MapUnitType = 
                 new Dictionary<int, MapUnitEntity.MapUnitType>() {
                     { 0, MapUnitEntity.MapUnitType.PUBLIC_ROAD },
@@ -130,6 +130,22 @@ namespace MAPF {
 
             Debug.Log(string.Format("[GlobalGrid] json map loaded with dimension [dimX, dimY] = [{0}, {1}]", 
                 dimX.ToString(), dimY.ToString()));
+        }
+
+        public void PopulateRobotWithJson(string filename) {
+            if (gridRobot == null || 
+                gridRobot.GetLength(0) != dimX || gridRobot.GetLength(1) != dimY) {
+                Debug.LogError("[GlobalGrid] PopulateRobotWithJson called but gridRobot not initialized yet");
+            }
+
+            string path = Path.Combine(Application.dataPath, "Convertor", "json", filename + ".json");
+            string arrOfPosJson = File.ReadAllText(path);
+            int[][] arrOfPos = JsonConvert.DeserializeObject<int[][]>(arrOfPosJson);
+
+            foreach(int[] pos in arrOfPos) {
+                // `new RobotEntity` here, instead of just change the `RobotType`
+                gridRobot[pos[0], pos[1]] = new RobotEntity(RobotEntity.RobotType.FREIGHT);
+            }
         }
         #endregion
     }
