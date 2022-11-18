@@ -10,23 +10,6 @@ namespace MAPF.Utils {
     public class AStar {
 
         #region Inner Class & Struct
-        public struct Coord {
-            public int x;
-            public int y;
-
-            public Coord(int x_, int y_) {
-                x = x_;
-                y = y_;
-            }
-
-            public static Coord operator +(Coord l, Coord r) {
-                return new Coord(l.x + r.x, l.y + r.y);
-            }
-
-            public override string ToString() {
-                return string.Format("({0}, {1})", x.ToString(), y.ToString());
-            }
-        }
         private class Node {
             public Coord pos;   //should be consistent with index in `AStar.graph`
             public bool canEnter;   //should be expend?

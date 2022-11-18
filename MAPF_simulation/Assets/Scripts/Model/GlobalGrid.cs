@@ -144,7 +144,7 @@ namespace MAPF {
 
             foreach(int[] pos in arrOfPos) {
                 // `new RobotEntity` here, instead of just change the `RobotType`
-                gridRobot[pos[0], pos[1]] = new RobotEntity(RobotEntity.RobotType.FREIGHT);
+                gridRobot[pos[0], pos[1]] = new FreightRobot();
             }
         }
         #endregion
