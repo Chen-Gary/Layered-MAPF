@@ -56,7 +56,8 @@ namespace MAPF.View {
         private void _RefreshView() {
             for (int x = 0; x < m_globalGrid.dimX; x++) {
                 for (int y = 0; y < m_globalGrid.dimY; y++) {
-                    m_gridEntityViews[x, y].RenderRobot(m_globalGrid.gridRobot[x, y].type);
+                    //m_gridEntityViews[x, y].RenderRobot(m_globalGrid.gridRobot[x, y].type);
+                    m_gridEntityViews[x, y].RenderRobot(m_globalGrid.gridRobot[x, y]);
                 }
             }
         }

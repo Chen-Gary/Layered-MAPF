@@ -8,7 +8,7 @@ namespace MAPF {
     public class FreightRobot : RobotEntity {
 
         private MapUnitEntity[,] gridMap;
-        private int priority;
+        public int priority;
         private Queue<Task> assignedTasks;
 
         public FreightRobot(Coord position_, int priority_) : base(RobotType.FREIGHT, position_) {
@@ -37,7 +37,20 @@ namespace MAPF {
             Task currentTask = assignedTasks.Peek();
 
             // plan path
-            AStar algorithm = new AStar(this.gridMap);
+            /*------------- avoid other robots -------------*/
+            // very dirty implementation!!!
+            MapUnitEntity[,] gridMapWithRobot = this.gridMap.Clone() as MapUnitEntity[,];
+            RobotEntity[,] gridRobotBuf = GlobalGrid._instance.gridRobot;
+            for (int x = 0; x < gridMapWithRobot.GetLength(0); x++) {
+                for (int y = 0; y < gridMapWithRobot.GetLength(1); y++) {
+                    if (gridRobotBuf[x, y].type == RobotType.FREIGHT) {
+                        gridMapWithRobot[x, y] = new MapUnitEntity(MapUnitEntity.MapUnitType.BARRIER);
+                    }
+                }
+            }
+            AStar algorithm = new AStar(gridMapWithRobot);
+            /*----------------------------------------------*/
+            //AStar algorithm = new AStar(this.gridMap);
             List<Coord> path = algorithm.FindPath(this.position, currentTask.targetPos);
             if (path == null || path.Count <= 0) {
                 Debug.LogError(string.Format("[FreightRobot] A star path planning failed, start{0} to target{1}",

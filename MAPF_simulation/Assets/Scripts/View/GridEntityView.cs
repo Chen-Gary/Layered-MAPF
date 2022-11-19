@@ -48,5 +48,15 @@ namespace MAPF.View {
             _fetchRobot.gameObject.SetActive(type == RobotEntity.RobotType.FETCH);
             _freightRobot.gameObject.SetActive(type == RobotEntity.RobotType.FREIGHT);
         }
+        public void RenderRobot(RobotEntity robot) {
+            _fetchRobot.gameObject.SetActive(robot.type == RobotEntity.RobotType.FETCH);
+            _freightRobot.gameObject.SetActive(robot.type == RobotEntity.RobotType.FREIGHT);
+
+            if (robot.type == RobotEntity.RobotType.FREIGHT) {
+                FreightRobot freightRobot = (FreightRobot)robot;
+                float rgbScale = 1f - (float)(50 * freightRobot.priority % 256) / 256f;
+                _freightRobot.color = new Color(rgbScale, rgbScale, rgbScale);
+            }
+        }
     }
 }
