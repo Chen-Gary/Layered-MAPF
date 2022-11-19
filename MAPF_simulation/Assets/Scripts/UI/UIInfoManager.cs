@@ -12,14 +12,9 @@ namespace MAPF.UI {
         [SerializeField]
         private TextMeshProUGUI _timeStampText = null;
 
-        private int m_currentTimeStamp = 0;
-
-        public void Render(int deltaTimeStamp) {
-            // viewModel part
-            m_currentTimeStamp += deltaTimeStamp;
-
+        public void Render(int updatedTimeStamp) {
             // view
-            _timeStampText.text = _FormatTimeStamp(m_currentTimeStamp);
+            _timeStampText.text = _FormatTimeStamp(updatedTimeStamp);
         }
 
         private string _FormatTimeStamp(int currentTimeStamp) {

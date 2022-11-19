@@ -20,16 +20,18 @@ namespace MAPF {
             assignedTasks = new Queue<Task>();
         }
 
-        public override void Operate() {
+        public override void Operate(out bool isIdle) {
             // fetch job from cloud
             if (assignedTasks.Count == 0) {
                 Task newTask;
                 if (!GlobalGrid._instance.RequestTask(out newTask)) {
-                    Debug.Log(string.Format("[RobotEntity] Robot[{0}] has not more job to perform", priority.ToString()));
+                    //Debug.Log(string.Format("[RobotEntity] Robot[{0}] has not more job to perform", priority.ToString()));
+                    isIdle = true;
                     return;     //return if no more task available
                 }
                 assignedTasks.Enqueue(newTask);
             }
+            isIdle = false;
 
             // decide current job
             Task currentTask = assignedTasks.Peek();

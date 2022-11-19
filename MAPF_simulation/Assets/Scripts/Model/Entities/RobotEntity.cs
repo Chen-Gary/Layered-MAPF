@@ -19,7 +19,8 @@ namespace MAPF {
             this.position = position_;
         }
 
-        public virtual void Operate() {
+        public virtual void Operate(out bool isIdle) {
+            isIdle = true;
             //Debug.Log("[RobotEntity] Operate called and do nothing");
         }
     }
