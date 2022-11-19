@@ -11,27 +11,27 @@ namespace MAPF.Convertor {
     [CreateAssetMenu(menuName = "Convertor/TaskGenerator")]
     public class TaskGenerator : ScriptableObject {
         [SerializeField]
-        private string _mapCsvFileName = null;
+        private string _mapJsonFileName = null;
         [SerializeField]
         private string _outputName = null;
         [SerializeField]
         private int _taskCount = 0;
 
         public void Generate() {
-            string pathIn = Path.Combine(Application.dataPath, "Convertor", "csv", _mapCsvFileName + ".csv");
+            string pathIn = Path.Combine(Application.dataPath, "Convertor", "json", _mapJsonFileName + ".json");
             string pathOut = Path.Combine(Application.dataPath, "Convertor", "task_set", _outputName + ".json");
-            string[] lines = File.ReadAllLines(pathIn);
+            string gridMapJson = File.ReadAllText(pathIn);
+            int[,] gridMapIntArr = JsonConvert.DeserializeObject<int[,]>(gridMapJson);
 
-            int dimY = lines.Length;                //row index -> Y
-            int dimX = lines[0].Split(',').Length;  //column index -> X
+            int dimX = gridMapIntArr.GetLength(0);
+            int dimY = gridMapIntArr.GetLength(1);
             int[,] gridMap = new int[dimX, dimY];
 
             List<List<int>> listOfPos = new List<List<int>>();
-            for (int j = 0; j < dimY; j++) {
-                string[] columns = lines[j].Split(',');
-                for (int i = 0; i < dimX; i++) {
-                    if (columns[i] == string.Empty) {
-                        listOfPos.Add(new List<int> { i, j });
+            for (int x = 0; x < dimX; x++) {
+                for (int y = 0; y < dimY; y++) {
+                    if (gridMapIntArr[x, y] == 0) {
+                        listOfPos.Add(new List<int> { x, y });
                     }
                 }
             }
