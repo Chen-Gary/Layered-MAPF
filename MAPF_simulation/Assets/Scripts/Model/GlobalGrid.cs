@@ -13,6 +13,14 @@ namespace MAPF {
     /// </summary>
     public class GlobalGrid {
 
+        #region Const
+        private static readonly Dictionary<int, MapUnitEntity.MapUnitType> int2MapUnitType =
+                new Dictionary<int, MapUnitEntity.MapUnitType>() {
+                    { 0, MapUnitEntity.MapUnitType.PUBLIC_ROAD },
+                    { 1, MapUnitEntity.MapUnitType.BARRIER }
+                };
+        #endregion
+
         public static GlobalGrid _instance;     //singleton
 
         public MapUnitEntity[,] gridMap;
@@ -35,7 +43,7 @@ namespace MAPF {
             gridMap = null;
             gridRobot = null;
 
-            InitTaskQueue();
+            GlobalTaskQueue = new Queue<Task>();
         }
 
         #region Robot
@@ -65,15 +73,6 @@ namespace MAPF {
         #endregion
 
         #region Task Assignment
-        private void InitTaskQueue() {
-            GlobalTaskQueue = new Queue<Task>();
-
-            // TODO: randomly generate tasks
-            GlobalTaskQueue.Enqueue(new Task(2, 6));
-            GlobalTaskQueue.Enqueue(new Task(12, 11));
-            GlobalTaskQueue.Enqueue(new Task(16, 3));
-        }
-
         public bool RequestTask(out Task nextTask) {
             if (GlobalTaskQueue.Count == 0) {
                 nextTask = null;
@@ -152,11 +151,6 @@ namespace MAPF {
 
         #region Populate Grid with Json
         public void PopulateMapWithJson(string filename) {
-            Dictionary<int, MapUnitEntity.MapUnitType> int2MapUnitType = 
-                new Dictionary<int, MapUnitEntity.MapUnitType>() {
-                    { 0, MapUnitEntity.MapUnitType.PUBLIC_ROAD },
-                    { 1, MapUnitEntity.MapUnitType.BARRIER }
-                };
 
             string path = Path.Combine(Application.dataPath, "Convertor", "json", filename + ".json");
             if (!File.Exists(path)) {
@@ -194,6 +188,7 @@ namespace MAPF {
             if (gridRobot == null || 
                 gridRobot.GetLength(0) != dimX || gridRobot.GetLength(1) != dimY) {
                 Debug.LogError("[GlobalGrid] PopulateRobotWithJson called but gridRobot not initialized yet");
+                return;
             }
 
             string path = Path.Combine(Application.dataPath, "Convertor", "json", filename + ".json");
@@ -206,6 +201,30 @@ namespace MAPF {
                 gridRobot[pos[0], pos[1]] = new FreightRobot(new Coord(pos[0], pos[1]), robotPriority);
                 robotPriority++;
             }
+            Debug.Log("[GlobalGrid] robots init with json successfully");
+        }
+
+        public void PopulateTaskQueueWithJson(string filename) {
+            if (GlobalTaskQueue == null) {
+                Debug.LogError("[GlobalGrid] PopulateTaskQueueWithJson called but `GlobalTaskQueue` not initialized yet");
+                return;
+            }
+            //GlobalTaskQueue.Enqueue(new Task(2, 6));
+            //GlobalTaskQueue.Enqueue(new Task(12, 11));
+            //GlobalTaskQueue.Enqueue(new Task(16, 3));
+
+            string path = Path.Combine(Application.dataPath, "Convertor", "task_set", filename + ".json");
+            string arrOfTaskJson = File.ReadAllText(path);
+            int[][] arrOfTask = JsonConvert.DeserializeObject<int[][]>(arrOfTaskJson);
+
+            foreach (int[] task in arrOfTask) {
+                if (!gridMap[task[0], task[1]].canEnter) {
+                    Debug.LogError("[GlobalGrid] invalid task set input");
+                    return;
+                }
+                GlobalTaskQueue.Enqueue(new Task(task[0], task[1]));
+            }
+            Debug.Log(string.Format("[GlobalGrid] global task queue init with json successfully, total task count = {0}", arrOfTask.Length));
         }
         #endregion
     }

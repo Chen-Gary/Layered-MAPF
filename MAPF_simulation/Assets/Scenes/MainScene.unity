@@ -242,6 +242,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _uiInfoManager: {fileID: 1375853470}
   _globalGridView: {fileID: 642902818}
+  _mapJsonFileName: Map1
+  _robotJsonFileName: Bot1
+  _taskSetJsonFileName: Task1
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0

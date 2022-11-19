@@ -11,6 +11,12 @@ namespace MAPF {
         private UIInfoManager _uiInfoManager = null;
         [SerializeField]
         private GlobalGridView _globalGridView = null;
+        [SerializeField]
+        private string _mapJsonFileName = null;
+        [SerializeField]
+        private string _robotJsonFileName = null;
+        [SerializeField]
+        private string _taskSetJsonFileName = null;
 
         private GlobalGrid m_globalGrid;
 
@@ -48,8 +54,9 @@ namespace MAPF {
             // construct `m_globalGrid`
             m_globalGrid = new GlobalGrid();
             //m_globalGrid.Populate_debug_v1();
-            m_globalGrid.PopulateMapWithJson("Map1");
-            m_globalGrid.PopulateRobotWithJson("Bot1");
+            m_globalGrid.PopulateMapWithJson(_mapJsonFileName);
+            m_globalGrid.PopulateRobotWithJson(_robotJsonFileName);
+            m_globalGrid.PopulateTaskQueueWithJson(_taskSetJsonFileName);
 
             // render
             _globalGridView.Render(m_globalGrid);

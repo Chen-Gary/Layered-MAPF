@@ -30,7 +30,7 @@ namespace MAPF.Convertor {
             List<List<int>> listOfPos = new List<List<int>>();
             for (int x = 0; x < dimX; x++) {
                 for (int y = 0; y < dimY; y++) {
-                    if (gridMapIntArr[x, y] == 0) {
+                    if (gridMapIntArr[x, y] == 0) {     // `MapUnitEntity.canEnter`
                         listOfPos.Add(new List<int> { x, y });
                     }
                 }
