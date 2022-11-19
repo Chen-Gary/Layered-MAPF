@@ -56,8 +56,8 @@ namespace MAPF {
             return globalTerminationFlag;
         }
 
-        private IEnumerator _SimulationLoop() {
-            while(m_keepSimulation) {
+        private IEnumerator _SimulationLoopCoroutine() {
+            while (m_keepSimulation) {
                 yield return new WaitForSeconds(0.5f);
                 bool globalTerminated = _OneSimulationPass();
 
@@ -68,11 +68,28 @@ namespace MAPF {
             }
         }
 
+        private void _SimulationLoop() {
+            while (m_keepSimulation) {
+                bool globalTerminated = _OneSimulationPass();
+
+                if (globalTerminated) {
+                    Debug.Log(string.Format("[SimulationEntry] simulation done, total time stamp: {0}", m_currentTimeStamp.ToString()));
+                    break;
+                }
+            }
+        }
+
+        public void StartSimulation() {
+            if (_needGraphics)
+                StartCoroutine(_SimulationLoopCoroutine());
+            else
+                _SimulationLoop();
+        }
+
         #region Unity Callbacks
         private void Start() {
             // construct `m_globalGrid`
             m_globalGrid = new GlobalGrid();
-            //m_globalGrid.Populate_debug_v1();
             m_globalGrid.PopulateMapWithJson(_mapJsonFileName);
             m_globalGrid.PopulateRobotWithJson(_robotJsonFileName);
             m_globalGrid.PopulateTaskQueueWithJson(_taskSetJsonFileName);
@@ -80,21 +97,6 @@ namespace MAPF {
             // render
             _globalGridView.Render(m_globalGrid);
             _uiInfoManager.Render(m_currentTimeStamp);
-
-
-            // start simulation
-            if (_needGraphics)
-                StartCoroutine(_SimulationLoop());
-            else {
-                while(m_keepSimulation) {
-                    bool globalTerminated = _OneSimulationPass();
-
-                    if (globalTerminated) {
-                        Debug.Log(string.Format("[SimulationEntry] simulation done, total time stamp: {0}", m_currentTimeStamp.ToString()));
-                        break;
-                    }
-                }
-            }
         }
 
         private void Update() {
