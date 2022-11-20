@@ -1,4 +1,8 @@
-# Multi-Agent Path Finding (MAPF)
+# A Layered Approach for Multi-Agent Path Finding
+
+Simulation platform of a Layered Approach for Multi-Agent Path Finding (MAPF).
+
+
 
 ## Environment
 
