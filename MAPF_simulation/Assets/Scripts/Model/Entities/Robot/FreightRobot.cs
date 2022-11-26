@@ -25,8 +25,9 @@ namespace MAPF {
             if (assignedTasks.Count == 0) {
                 Task newTask;
                 if (!GlobalGrid._instance.RequestTask(out newTask)) {
-                    //Debug.Log(string.Format("[RobotEntity] Robot[{0}] has not more job to perform", priority.ToString()));
                     isIdle = true;
+                    GlobalGrid._instance.RemoveRobot(this);     //idle robot will be removed
+                    Debug.Log(string.Format("[RobotEntity] Robot[{0}] has not more job to perform, so it is removed", priority.ToString()));
                     return;     //return if no more task available
                 }
                 assignedTasks.Enqueue(newTask);
@@ -40,12 +41,15 @@ namespace MAPF {
             /*------------- avoid other robots -------------*/
             // very dirty implementation!!!
             MapUnitEntity[,] gridMapWithRobot = this.gridMap.Clone() as MapUnitEntity[,];
-            RobotEntity[,] gridRobotBuf = GlobalGrid._instance.gridRobot;
-            for (int x = 0; x < gridMapWithRobot.GetLength(0); x++) {
-                for (int y = 0; y < gridMapWithRobot.GetLength(1); y++) {
-                    if (gridRobotBuf[x, y].type == RobotType.FREIGHT) {
-                        gridMapWithRobot[x, y] = new MapUnitEntity(MapUnitEntity.MapUnitType.BARRIER);
+            List<FreightRobot> neighbors = GetNeighborRobots();
+            if (neighbors.Count >= 4) {
+                return; //just return and stay at current position
+            } else {
+                foreach(FreightRobot neighbor in neighbors) {
+                    if (neighbor.position == currentTask.targetPos) {
+                        return; //just return and stay at current position
                     }
+                    gridMapWithRobot[neighbor.position.x, neighbor.position.y] = new MapUnitEntity(MapUnitEntity.MapUnitType.BARRIER);
                 }
             }
             AStar algorithm = new AStar(gridMapWithRobot);
@@ -53,14 +57,31 @@ namespace MAPF {
             //AStar algorithm = new AStar(this.gridMap);
             List<Coord> path = algorithm.FindPath(this.position, currentTask.targetPos);
             if (path == null || path.Count <= 0) {
-                Debug.LogError(string.Format("[FreightRobot] A star path planning failed, start{0} to target{1}",
+                Debug.LogWarning(string.Format("[FreightRobot] A star path planning failed, start{0} to target{1}",
                     this.position.ToString(), currentTask.targetPos.ToString()));
-                return;
+                return; //stay at current position
             }
             Coord nextStep = path[0];
 
             // actual move
             MoveToAdjacent(nextStep);
+        }
+
+        private List<FreightRobot> GetNeighborRobots() {
+            List<FreightRobot> neighbors = new List<FreightRobot>();
+
+            RobotEntity[,] gridRobotBuf = GlobalGrid._instance.gridRobot;
+            RobotEntity robotRight = gridRobotBuf[position.x + 1, position.y];
+            RobotEntity robotLeft = gridRobotBuf[position.x - 1, position.y];
+            RobotEntity robotUp = gridRobotBuf[position.x, position.y + 1];
+            RobotEntity robotDown = gridRobotBuf[position.x, position.y - 1];
+
+            if (robotRight.type == RobotType.FREIGHT) neighbors.Add((FreightRobot)robotRight);
+            if (robotLeft.type == RobotType.FREIGHT) neighbors.Add((FreightRobot)robotLeft);
+            if (robotUp.type == RobotType.FREIGHT) neighbors.Add((FreightRobot)robotUp);
+            if (robotDown.type == RobotType.FREIGHT) neighbors.Add((FreightRobot)robotDown);
+
+            return neighbors;
         }
 
         private void MoveToAdjacent(Coord nextPos) {

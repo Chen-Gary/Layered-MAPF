@@ -58,7 +58,7 @@ namespace MAPF {
 
         private IEnumerator _SimulationLoopCoroutine() {
             while (m_keepSimulation) {
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.2f);
                 bool globalTerminated = _OneSimulationPass();
 
                 if (globalTerminated) {

@@ -79,7 +79,10 @@ namespace MAPF.Utils {
             Node bufferNode = goal;
             while (bufferNode != start) {
                 path.Add(bufferNode.pos);
-                bufferNode = came_from[bufferNode];
+                if (!came_from.TryGetValue(bufferNode, out bufferNode)) {
+                    Debug.Log("[AStar] AStar fails to find the path");
+                    return null;
+                }
             }
             //path.Add(start.pos);  //`startPos` is not included in the path
             path.Reverse();

@@ -65,10 +65,18 @@ namespace MAPF {
             }
 
             // update `gridRobot`
-            gridRobot[currentPos.x, currentPos.y] = new RobotEntity(RobotEntity.RobotType.NONE, 
-                                                                    new Coord(currentPos.x, currentPos.y));
+            gridRobot[currentPos.x, currentPos.y] = gridRobot[nextPos.x, nextPos.y];    //set current position to NONE
             gridRobot[nextPos.x, nextPos.y] = robot;
             return true;
+        }
+
+        public void RemoveRobot(RobotEntity robot) {
+            Coord pos = robot.position;
+            if (robot != gridRobot[pos.x, pos.y]) {   //they should be the same instance
+                Debug.LogError("[GlobalGrid] currentPos of robot is inconsistent with `gridRobot`");
+                return;
+            }
+            gridRobot[pos.x, pos.y] = new RobotEntity(RobotEntity.RobotType.NONE, new Coord(pos.x, pos.y));
         }
         #endregion
 
@@ -79,7 +87,8 @@ namespace MAPF {
                 return false;
             } else {
                 nextTask = GlobalTaskQueue.Dequeue();
-                Debug.Log(string.Format("[GlobalGrid] task={0} is assigned to robot", nextTask.targetPos.ToString()));
+                Debug.Log(string.Format("[GlobalGrid] task={0} is assigned to robot, {1} tasks left to be assigned", 
+                    nextTask.targetPos.ToString(), GlobalTaskQueue.Count.ToString()));
                 return true;
             }
         }

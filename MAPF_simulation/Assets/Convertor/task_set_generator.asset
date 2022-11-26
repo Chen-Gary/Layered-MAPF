@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 437f18d961564074ab57cc8519b0831c, type: 3}
   m_Name: task_set_generator
   m_EditorClassIdentifier: 
-  _mapJsonFileName: Map1
-  _outputName: Task1
-  _taskCount: 100
+  _mapJsonFileName: Map_76_48
+  _outputName: Task_76_48
+  _taskCount: 500
