@@ -56,7 +56,8 @@ namespace MAPF {
                 return false;
             }
             // if nextPos is valid
-            if (gridRobot[nextPos.x, nextPos.y].type != RobotEntity.RobotType.NONE) {
+            if (gridRobot[nextPos.x, nextPos.y].type != RobotEntity.RobotType.NONE && 
+                gridRobot[nextPos.x, nextPos.y] != robot) {
                 Debug.LogWarning(string.Format("[GlobalGrid] the position intended to move {0} to is already occupied", nextPos.ToString()));
                 return false;
             }

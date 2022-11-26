@@ -62,12 +62,12 @@ namespace MAPF {
 
             AStar algorithm = new AStar(gridMapWithRobot, localHeatmap);
             List<Coord> path = algorithm.FindPath(this.position, currentTask.targetPos);
-            if (path == null || path.Count <= 0) {
+            if (path == null) {
                 Debug.LogWarning(string.Format("[FreightRobot] A star path planning failed, start{0} to target{1}",
                     this.position.ToString(), currentTask.targetPos.ToString()));
                 return; //stay at current position
             }
-            Coord nextStep = path[0];
+            Coord nextStep = (path.Count == 0) ? this.position : path[0];
 
             // actual move
             MoveToAdjacent(nextStep);
