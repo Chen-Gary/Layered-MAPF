@@ -21,6 +21,8 @@ namespace MAPF {
         private string _robotJsonFileName = null;
         [SerializeField]
         private string _taskSetJsonFileName = null;
+        [SerializeField]
+        private float _delayBetweenPasses = 1f;
 
         private int m_currentTimeStamp = 0;
 
@@ -58,7 +60,7 @@ namespace MAPF {
 
         private IEnumerator _SimulationLoopCoroutine() {
             while (m_keepSimulation) {
-                yield return new WaitForSeconds(0.2f);
+                yield return new WaitForSeconds(_delayBetweenPasses);
                 bool globalTerminated = _OneSimulationPass();
 
                 if (globalTerminated) {

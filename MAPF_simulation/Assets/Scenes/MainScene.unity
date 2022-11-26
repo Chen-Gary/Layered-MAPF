@@ -408,6 +408,7 @@ MonoBehaviour:
   _mapJsonFileName: Map_76_48
   _robotJsonFileName: Bot_76_48
   _taskSetJsonFileName: Task_76_48
+  _delayBetweenPasses: 0.2
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
