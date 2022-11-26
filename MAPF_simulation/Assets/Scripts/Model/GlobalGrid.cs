@@ -25,6 +25,7 @@ namespace MAPF {
 
         public MapUnitEntity[,] gridMap;
         public RobotEntity[,] gridRobot;
+        public float[,] globalHeatmap;
 
         public int dimX = 0;
         public int dimY = 0;
@@ -67,6 +68,18 @@ namespace MAPF {
             // update `gridRobot`
             gridRobot[currentPos.x, currentPos.y] = gridRobot[nextPos.x, nextPos.y];    //set current position to NONE
             gridRobot[nextPos.x, nextPos.y] = robot;
+
+            // update global heatmap
+            //TODO...
+            globalHeatmap = new float[dimX, dimY];  //automatically init to all 0
+            for (int x = 0; x < dimX; x++) {
+                for (int y = 0; y < dimY; y++) {
+                    if (gridRobot[x, y].type == RobotEntity.RobotType.FREIGHT) {
+                        globalHeatmap[x, y] += 6f;
+                    }
+                }
+            }
+            
             return true;
         }
 
@@ -173,6 +186,7 @@ namespace MAPF {
             dimY = gridMapIntArr.GetLength(1);
             gridMap = new MapUnitEntity[dimX, dimY];
             gridRobot = new RobotEntity[dimX, dimY];
+            globalHeatmap = new float[dimX, dimY];  //automatically init to all 0
 
             // init
             for (int x = 0; x < dimX; x++) {

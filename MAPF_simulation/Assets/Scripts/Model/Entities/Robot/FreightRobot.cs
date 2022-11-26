@@ -39,7 +39,7 @@ namespace MAPF {
 
             // plan path
             /*------------- avoid other robots -------------*/
-            // very dirty implementation!!!
+            // check neighbors
             MapUnitEntity[,] gridMapWithRobot = this.gridMap.Clone() as MapUnitEntity[,];
             List<FreightRobot> neighbors = GetNeighborRobots();
             if (neighbors.Count >= 4) {
@@ -52,9 +52,15 @@ namespace MAPF {
                     gridMapWithRobot[neighbor.position.x, neighbor.position.y] = new MapUnitEntity(MapUnitEntity.MapUnitType.BARRIER);
                 }
             }
-            AStar algorithm = new AStar(gridMapWithRobot);
             /*----------------------------------------------*/
-            //AStar algorithm = new AStar(this.gridMap);
+
+            /*------------- get local heatmap -------------*/
+            float[,] localHeatmap = GlobalGrid._instance.globalHeatmap.Clone() as float[,];
+            //TODO...
+            /*----------------------------------------------*/
+
+
+            AStar algorithm = new AStar(gridMapWithRobot, localHeatmap);
             List<Coord> path = algorithm.FindPath(this.position, currentTask.targetPos);
             if (path == null || path.Count <= 0) {
                 Debug.LogWarning(string.Format("[FreightRobot] A star path planning failed, start{0} to target{1}",

@@ -13,10 +13,12 @@ namespace MAPF.Utils {
         private class Node {
             public Coord pos;   //should be consistent with index in `AStar.graph`
             public bool canEnter;   //should be expend?
+            public float costToEnter;
 
-            public Node(Coord pos_, bool canEnter_) {
+            public Node(Coord pos_, bool canEnter_, float costToEnter_) {
                 pos = pos_;
                 canEnter = canEnter_;
+                costToEnter = costToEnter_;
             }
         }
         #endregion
@@ -27,7 +29,13 @@ namespace MAPF.Utils {
 
         private Node[,] graph;
 
-        public AStar(MapUnitEntity[,] gridMap) {
+        public AStar(MapUnitEntity[,] gridMap, float[,] heatmap) {
+            if (gridMap.GetLength(0) != heatmap.GetLength(0) ||
+                gridMap.GetLength(1) != heatmap.GetLength(1)) {
+                Debug.LogError("[AStar] dimension of gridMap and heatmap is not consistent");
+                return;
+            }
+
             int dimX = gridMap.GetLength(0);
             int dimY = gridMap.GetLength(1);
             graph = new Node[dimX, dimY];
@@ -35,7 +43,7 @@ namespace MAPF.Utils {
             for (int x = 0; x < dimX; x++) {
                 for (int y = 0; y < dimY; y++) {
                     bool canEnter = gridMap[x, y].canEnter;
-                    Node node = new Node(new Coord(x, y), canEnter);
+                    Node node = new Node(new Coord(x, y), canEnter, DEFAULT_COST + heatmap[x, y]);
                     graph[x, y] = node;
                 }
             }
@@ -64,7 +72,8 @@ namespace MAPF.Utils {
 
                 List<Node> neighbors = _GetNeighbors(current.pos);
                 foreach (Node next in neighbors) {
-                    float new_cost = cost_so_far[current] + DEFAULT_COST;
+                    float new_cost = cost_so_far[current] + next.costToEnter;   //use heatmap
+                    //float new_cost = cost_so_far[current] + DEFAULT_COST;     //do not use heatmap
                     if (!cost_so_far.ContainsKey(next) || new_cost < cost_so_far[next]) {
                         cost_so_far[next] = new_cost;   //add new or update
                         float priority = new_cost + heuristic(goal, next);
