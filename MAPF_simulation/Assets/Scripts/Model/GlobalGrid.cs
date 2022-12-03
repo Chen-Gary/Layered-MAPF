@@ -70,9 +70,12 @@ namespace MAPF {
             }
 
             // update `gridRobot`
+            robot.position = nextPos;
+            gridRobot[nextPos.x, nextPos.y].position = currentPos;
+
             gridRobot[currentPos.x, currentPos.y] = gridRobot[nextPos.x, nextPos.y];    //set current position to NONE
             gridRobot[nextPos.x, nextPos.y] = robot;
-            robot.position = nextPos;
+
 
             // update global heatmap
             switch(config._globalHeatmapAlgorithm) {
