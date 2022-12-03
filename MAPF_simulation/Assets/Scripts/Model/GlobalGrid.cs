@@ -132,7 +132,10 @@ namespace MAPF {
             Coord baseCoord = robot.position;
             globalHeatmap[baseCoord.x, baseCoord.y] += config._Naive_weight;
         }
-        
+
+        private int T_SHAPE_LEN = 3;
+        private float T_SHAPE_SCALAR_1 = 4f;
+        private float T_SHAPE_SCALAR_2 = 2f;
         private void _UpdateHeatmap_TShape(FreightRobot robot) {
             Coord.UnitDirection prevMove = robot.prevMove;
 
@@ -150,19 +153,43 @@ namespace MAPF {
             foreach (Coord.UnitDirection direction in directions) {
                 Coord deltaCoord = Coord.UnitDirection2DeltaCoord(direction);
                 if (prevMove == direction) {
-                    for (int i = 0; i <= 3; i++) {
-                        _IncrementGlobalHeatmapIfPossible(robot.position + i* deltaCoord, 6f);
+                    for (int i = 0; i <= T_SHAPE_LEN; i++) {
+                        _IncrementHeatmapIfPossible(this.globalHeatmap, robot.position + i* deltaCoord, T_SHAPE_SCALAR_1);
                     }
                 } else if (Coord.IsOnAxisAndPerpendicular(prevMove, direction)) {
-                    _IncrementGlobalHeatmapIfPossible(robot.position + deltaCoord, 3f);
+                    _IncrementHeatmapIfPossible(this.globalHeatmap, robot.position + deltaCoord, T_SHAPE_SCALAR_2);
                 }
             }
         }
 
-        private void _IncrementGlobalHeatmapIfPossible(Coord idx, float amount) {
-            if (idx.x >= 0 && idx.x < globalHeatmap.GetLength(0) &&
-                idx.y >= 0 && idx.y < globalHeatmap.GetLength(1)) {
-                globalHeatmap[idx.x, idx.y] += amount;
+        public void TShapeExcludeSelf(FreightRobot robot, float[,] localHeatmap) {
+            Coord.UnitDirection prevMove = robot.prevMove;
+
+            if (prevMove == Coord.UnitDirection.ZERO) {
+                return;
+            }
+
+            // T-Shape
+            Coord.UnitDirection[] directions = new Coord.UnitDirection[] {
+                Coord.UnitDirection.LEFT, Coord.UnitDirection.RIGHT,
+                Coord.UnitDirection.UP, Coord.UnitDirection.DOWN
+            };
+            foreach (Coord.UnitDirection direction in directions) {
+                Coord deltaCoord = Coord.UnitDirection2DeltaCoord(direction);
+                if (prevMove == direction) {
+                    for (int i = 0; i <= T_SHAPE_LEN; i++) {
+                        _IncrementHeatmapIfPossible(localHeatmap, robot.position + i * deltaCoord, -T_SHAPE_SCALAR_1);
+                    }
+                } else if (Coord.IsOnAxisAndPerpendicular(prevMove, direction)) {
+                    _IncrementHeatmapIfPossible(localHeatmap, robot.position + deltaCoord, -T_SHAPE_SCALAR_2);
+                }
+            }
+        }
+
+        private void _IncrementHeatmapIfPossible(float[,] heatmap, Coord idx, float amount) {
+            if (idx.x >= 0 && idx.x < heatmap.GetLength(0) &&
+                idx.y >= 0 && idx.y < heatmap.GetLength(1)) {
+                heatmap[idx.x, idx.y] += amount;
             }
         }
         #endregion
