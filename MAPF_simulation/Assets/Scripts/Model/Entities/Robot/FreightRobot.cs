@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MAPF.Utils;
@@ -63,14 +64,19 @@ namespace MAPF {
             /*----------------------------------------------*/
 
             /*------------- get local heatmap -------------*/
-            float[,] localHeatmap;
+            float[,] localHeatmap = GlobalGrid._instance.globalHeatmap.Clone() as float[,];
             switch (config._localHeatmapAlgorithm) {
                 case SimulationConfig.LocalHM.Naive:
-                    localHeatmap = _DerivateLocalHeatmap_Naive(GlobalGrid._instance.globalHeatmap);
+                    _LoopThroughEachSlot(localHeatmap, _DerivateLocalHeatmap_Naive);
+                    break;
+                case SimulationConfig.LocalHM.InverseProportion:
+                    _LoopThroughEachSlot(localHeatmap, _DerivateLocalHeatmap_InverseProportion);
+                    break;
+                case SimulationConfig.LocalHM.Piecewise:
+                    _LoopThroughEachSlot(localHeatmap, _DerivateLocalHeatmap_Piecewise);
                     break;
                 default:
                     Debug.LogError("[FreightRobot] invalid _localHeatmapAlgorithm");
-                    localHeatmap = _DerivateLocalHeatmap_Naive(GlobalGrid._instance.globalHeatmap);
                     break;
             }
             /*----------------------------------------------*/
@@ -137,8 +143,41 @@ namespace MAPF {
         }
 
         #region Local Heatmap
-        private float[,] _DerivateLocalHeatmap_Naive(float[,] globalHeatmap) {
-            return globalHeatmap.Clone() as float[,];
+        private void _LoopThroughEachSlot(float[,] localHeatmap, Func<Coord, Coord, float, float> func) {
+            int dimX = localHeatmap.GetLength(0);
+            int dimY = localHeatmap.GetLength(1);
+
+            for (int x = 0; x < dimX; x++) {
+                for (int y = 0; y < dimY; y++) {
+                    Coord thisCoord = new Coord(x, y);
+                    localHeatmap[x, y] = func(this.position, thisCoord, localHeatmap[x, y]);
+                }
+            }
+        }
+
+        private float _DerivateLocalHeatmap_Naive(Coord robotPos, Coord slotPos, float originalHeat) {
+            return originalHeat;
+        }
+
+        private float _DerivateLocalHeatmap_InverseProportion(Coord robotPos, Coord slotPos, float originalHeat) {
+            float SCALE = 3f;
+            int dist = Coord.ManhattanDistance(robotPos, slotPos);
+            float newHeat = originalHeat * (SCALE / (float)dist);
+            return newHeat;
+        }
+
+        private float _DerivateLocalHeatmap_Piecewise(Coord robotPos, Coord slotPos, float originalHeat) {
+            int dist = Coord.ManhattanDistance(robotPos, slotPos);
+            if (dist < 6)
+                return originalHeat * 1f;
+            else if (dist < 12)
+                return originalHeat * 0.8f;
+            else if (dist < 24)
+                return originalHeat * 0.5f;
+            else if (dist < 50)
+                return originalHeat * 0.2f;
+            else
+                return originalHeat * 0f;
         }
         #endregion
     }

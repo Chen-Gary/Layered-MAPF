@@ -13,7 +13,7 @@ namespace MAPF {
         }
 
         public enum LocalHM {
-            Naive
+            Naive, InverseProportion, Piecewise
         }
         #endregion
 
