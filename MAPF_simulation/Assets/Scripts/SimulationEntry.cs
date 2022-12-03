@@ -7,11 +7,8 @@ using MAPF.View;
 
 namespace MAPF { 
     public class SimulationEntry : MonoBehaviour {
-        [Header("Config")]
-        [SerializeField]
-        private bool _needGraphics = true;
-        [SerializeField]
-        private float _delayBetweenPasses = 1f;
+
+        public SimulationConfig _config;
 
         [Header("Static Reference")]
         [SerializeField]
@@ -19,13 +16,6 @@ namespace MAPF {
         [SerializeField]
         private GlobalGridView _globalGridView = null;
 
-        [Header("Files to Load")]
-        [SerializeField]
-        private string _mapJsonFileName = null;
-        [SerializeField]
-        private string _robotJsonFileName = null;
-        [SerializeField]
-        private string _taskSetJsonFileName = null;
 
         public static SimulationEntry instance;     //singleton
 
@@ -38,7 +28,7 @@ namespace MAPF {
 
         private bool _OneSimulationPass() {
             m_currentTimeStamp++;
-            if (_needGraphics) 
+            if (_config._needGraphics) 
                 _uiInfoManager.Render(m_currentTimeStamp);
 
             // for all robot
@@ -57,7 +47,7 @@ namespace MAPF {
             }
 
             // rerender view
-            if (_needGraphics)
+            if (_config._needGraphics)
                 _globalGridView.Render(m_globalGrid);
 
             return globalTerminationFlag;
@@ -65,7 +55,7 @@ namespace MAPF {
 
         private IEnumerator _SimulationLoopCoroutine() {
             while (m_keepSimulation) {
-                yield return new WaitForSeconds(_delayBetweenPasses);
+                yield return new WaitForSeconds(_config._delayBetweenPasses);
                 bool globalTerminated = _OneSimulationPass();
 
                 if (globalTerminated) {
@@ -87,7 +77,7 @@ namespace MAPF {
         }
 
         public void StartSimulation() {
-            if (_needGraphics)
+            if (_config._needGraphics)
                 StartCoroutine(_SimulationLoopCoroutine());
             else
                 _SimulationLoop();
@@ -106,9 +96,9 @@ namespace MAPF {
         private void Start() {
             // construct `m_globalGrid`
             m_globalGrid = new GlobalGrid();
-            m_globalGrid.PopulateMapWithJson(_mapJsonFileName);
-            m_globalGrid.PopulateRobotWithJson(_robotJsonFileName);
-            m_globalGrid.PopulateTaskQueueWithJson(_taskSetJsonFileName);
+            m_globalGrid.PopulateMapWithJson(_config._mapJsonFileName);
+            m_globalGrid.PopulateRobotWithJson(_config._robotJsonFileName);
+            m_globalGrid.PopulateTaskQueueWithJson(_config._taskSetJsonFileName);
 
             // render
             _globalGridView.Render(m_globalGrid);

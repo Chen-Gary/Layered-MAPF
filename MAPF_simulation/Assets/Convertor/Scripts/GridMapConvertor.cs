@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 
 namespace MAPF.Convertor {
-    [CreateAssetMenu(menuName = "Convertor/GridMapConvertor")]
+    [CreateAssetMenu(menuName = "MAPF/Convertor/GridMapConvertor")]
     public class GridMapConvertor : ScriptableObject {
         [SerializeField]
         private string MapCsvFileName = null;

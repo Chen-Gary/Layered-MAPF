@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 
 namespace MAPF.Convertor {
-    [CreateAssetMenu(menuName = "Convertor/TaskGenerator")]
+    [CreateAssetMenu(menuName = "MAPF/Convertor/TaskGenerator")]
     public class TaskGenerator : ScriptableObject {
         [SerializeField]
         private string _mapJsonFileName = null;

@@ -402,13 +402,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7b8cf5519833bf49b32173b5d226ca3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _needGraphics: 1
+  _config: {fileID: 11400000, guid: 8be584d6988a5f44a9309c2e471ade03, type: 2}
   _uiInfoManager: {fileID: 1375853470}
   _globalGridView: {fileID: 642902818}
-  _mapJsonFileName: Map_76_48
-  _robotJsonFileName: Bot_76_48
-  _taskSetJsonFileName: Task_76_48
-  _delayBetweenPasses: 0.2
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
