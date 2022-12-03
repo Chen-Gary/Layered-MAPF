@@ -31,6 +31,7 @@ namespace MAPF {
         public int dimY = 0;
 
         private Queue<Task> GlobalTaskQueue;
+        private SimulationConfig config;
 
         public GlobalGrid() {
             if (_instance != null) {
@@ -45,6 +46,7 @@ namespace MAPF {
             gridRobot = null;
 
             GlobalTaskQueue = new Queue<Task>();
+            config = SimulationEntry.instance._config;
         }
 
         #region Robot
@@ -71,8 +73,17 @@ namespace MAPF {
             gridRobot[nextPos.x, nextPos.y] = robot;
 
             // update global heatmap
-            //_UpdateHeatmap_NoHeatmap();
-            _UpdateHeatmap_Naive(6);
+            switch(config._globalHeatmapAlgorithm) {
+                case SimulationConfig.GlobalHM.NoHeatmap:
+                    _UpdateHeatmap_NoHeatmap();
+                    break;
+                case SimulationConfig.GlobalHM.Naive:
+                    _UpdateHeatmap_Naive(config._Naive_weight);
+                    break;
+                default:
+                    Debug.LogError("[GlobalGrid] invalid _globalHeatmapAlgorithm");
+                    break;
+            }
 
             return true;
         }

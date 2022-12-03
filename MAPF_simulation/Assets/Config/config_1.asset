@@ -17,3 +17,6 @@ MonoBehaviour:
   _mapJsonFileName: Map_76_48
   _robotJsonFileName: Bot_76_48
   _taskSetJsonFileName: Task_76_48
+  _globalHeatmapAlgorithm: 1
+  _Naive_weight: 6
+  _localHeatmapAlgorithm: 0

@@ -11,6 +11,7 @@ namespace MAPF {
         public Coord.UnitDirection prevMove = Coord.UnitDirection.ZERO;
 
         private MapUnitEntity[,] gridMap;
+        private SimulationConfig config;
         private Queue<Task> assignedTasks;
 
         public FreightRobot(Coord position_, int priority_) : base(RobotType.FREIGHT, position_) {
@@ -18,6 +19,7 @@ namespace MAPF {
                 Debug.LogError("[FreightRobot] GlobalGrid._instance is null, when trying to instantiate FreightRobot");
 
             gridMap = GlobalGrid._instance.gridMap;
+            config = SimulationEntry.instance._config;
             priority = priority_;
             assignedTasks = new Queue<Task>();
         }
@@ -61,7 +63,16 @@ namespace MAPF {
             /*----------------------------------------------*/
 
             /*------------- get local heatmap -------------*/
-            float[,] localHeatmap = _DerivateLocalHeatmap_Naive(GlobalGrid._instance.globalHeatmap);
+            float[,] localHeatmap;
+            switch (config._localHeatmapAlgorithm) {
+                case SimulationConfig.LocalHM.Naive:
+                    localHeatmap = _DerivateLocalHeatmap_Naive(GlobalGrid._instance.globalHeatmap);
+                    break;
+                default:
+                    Debug.LogError("[FreightRobot] invalid _localHeatmapAlgorithm");
+                    localHeatmap = _DerivateLocalHeatmap_Naive(GlobalGrid._instance.globalHeatmap);
+                    break;
+            }
             /*----------------------------------------------*/
 
 

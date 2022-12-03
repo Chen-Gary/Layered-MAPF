@@ -7,6 +7,16 @@ namespace MAPF {
     [CreateAssetMenu(menuName = "MAPF/SimulationConfig")]
     public class SimulationConfig : ScriptableObject {
 
+        #region Enum
+        public enum GlobalHM {
+            NoHeatmap, Naive
+        }
+
+        public enum LocalHM {
+            Naive
+        }
+        #endregion
+
         [Header("Graphic Config")]
         public bool _needGraphics = true;
         public float _delayBetweenPasses = 1f;
@@ -15,5 +25,12 @@ namespace MAPF {
         public string _mapJsonFileName = null;
         public string _robotJsonFileName = null;
         public string _taskSetJsonFileName = null;
+
+        [Header("Global Heatmap Config")]
+        public GlobalHM _globalHeatmapAlgorithm = GlobalHM.NoHeatmap;
+        public float _Naive_weight = 6f;
+
+        [Header("Local Heatmap Config")]
+        public LocalHM _localHeatmapAlgorithm = LocalHM.Naive;
     }
 }
