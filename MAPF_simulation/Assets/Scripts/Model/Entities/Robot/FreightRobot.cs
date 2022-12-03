@@ -61,8 +61,7 @@ namespace MAPF {
             /*----------------------------------------------*/
 
             /*------------- get local heatmap -------------*/
-            float[,] localHeatmap = GlobalGrid._instance.globalHeatmap.Clone() as float[,];
-            //TODO...
+            float[,] localHeatmap = _DerivateLocalHeatmap_Naive(GlobalGrid._instance.globalHeatmap);
             /*----------------------------------------------*/
 
 
@@ -125,5 +124,11 @@ namespace MAPF {
             }
             
         }
+
+        #region Local Heatmap
+        private float[,] _DerivateLocalHeatmap_Naive(float[,] globalHeatmap) {
+            return globalHeatmap.Clone() as float[,];
+        }
+        #endregion
     }
 }

@@ -71,16 +71,9 @@ namespace MAPF {
             gridRobot[nextPos.x, nextPos.y] = robot;
 
             // update global heatmap
-            //TODO...
-            globalHeatmap = new float[dimX, dimY];  //automatically init to all 0
-            for (int x = 0; x < dimX; x++) {
-                for (int y = 0; y < dimY; y++) {
-                    if (gridRobot[x, y].type == RobotEntity.RobotType.FREIGHT) {
-                        globalHeatmap[x, y] += 6f;
-                    }
-                }
-            }
-            
+            //_UpdateHeatmap_NoHeatmap();
+            _UpdateHeatmap_Naive(6);
+
             return true;
         }
 
@@ -91,6 +84,23 @@ namespace MAPF {
                 return;
             }
             gridRobot[pos.x, pos.y] = new RobotEntity(RobotEntity.RobotType.NONE, new Coord(pos.x, pos.y));
+        }
+        #endregion
+
+        #region Heatmap
+        private void _UpdateHeatmap_NoHeatmap() {
+            this.globalHeatmap = new float[dimX, dimY];  //automatically init to all 0
+        }
+
+        private void _UpdateHeatmap_Naive(float weight) {
+            this.globalHeatmap = new float[dimX, dimY];  //automatically init to all 0
+            for (int x = 0; x < dimX; x++) {
+                for (int y = 0; y < dimY; y++) {
+                    if (gridRobot[x, y].type == RobotEntity.RobotType.FREIGHT) {
+                        globalHeatmap[x, y] += weight;
+                    }
+                }
+            }
         }
         #endregion
 
