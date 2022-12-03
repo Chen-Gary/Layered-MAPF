@@ -26,7 +26,8 @@ namespace MAPF {
         private string _robotJsonFileName = null;
         [SerializeField]
         private string _taskSetJsonFileName = null;
-        
+
+        public static SimulationEntry instance;     //singleton
 
         private int m_currentTimeStamp = 0;
 
@@ -93,6 +94,15 @@ namespace MAPF {
         }
 
         #region Unity Callbacks
+        private void Awake() {
+            if (instance != null && instance != this) {
+                Debug.LogError("[SimulationEntry] more than one SimulationEntry instance created");
+                Destroy(this);
+            } else {
+                instance = this;
+            }
+        }
+
         private void Start() {
             // construct `m_globalGrid`
             m_globalGrid = new GlobalGrid();

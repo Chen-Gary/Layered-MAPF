@@ -30,7 +30,7 @@ namespace MAPF {
         public int dimX = 0;
         public int dimY = 0;
 
-        Queue<Task> GlobalTaskQueue;
+        private Queue<Task> GlobalTaskQueue;
 
         public GlobalGrid() {
             if (_instance != null) {
