@@ -7,6 +7,49 @@ namespace MAPF.Utils {
         public int x;
         public int y;
 
+        public enum UnitDirection {
+            ZERO,
+            LEFT,
+            RIGHT,
+            UP,
+            DOWN
+        }
+
+        public static Coord UnitDirection2DeltaCoord(UnitDirection direction) {
+            if (direction == UnitDirection.ZERO)
+                return new Coord(0, 0);
+            else if (direction == UnitDirection.LEFT)
+                return new Coord(-1, 0);
+            else if (direction == UnitDirection.RIGHT)
+                return new Coord(1, 0);
+            else if (direction == UnitDirection.UP)
+                return new Coord(0, 1);
+            else if (direction == UnitDirection.DOWN)
+                return new Coord(0, -1);
+            else {
+                Debug.LogError("[Coord] invalid direction");
+                return new Coord(0, 0);
+            }
+        }
+
+        public static UnitDirection DeltaCoord2UnitDirection(Coord deltaCoord) {
+            if (deltaCoord == new Coord(0, 0))
+                return UnitDirection.ZERO;
+            else if (deltaCoord == new Coord(-1, 0))
+                return UnitDirection.LEFT;
+            else if (deltaCoord == new Coord(1, 0))
+                return UnitDirection.RIGHT;
+            else if (deltaCoord == new Coord(0, 1))
+                return UnitDirection.UP;
+            else if (deltaCoord == new Coord(0, -1))
+                return UnitDirection.DOWN;
+            else {
+                Debug.LogError("[Coord] invalid deltaCoord");
+                return UnitDirection.ZERO;
+            }
+        }
+
+
         public Coord(int x_, int y_) {
             x = x_;
             y = y_;
@@ -14,6 +57,10 @@ namespace MAPF.Utils {
 
         public static Coord operator +(Coord l, Coord r) {
             return new Coord(l.x + r.x, l.y + r.y);
+        }
+
+        public static Coord operator -(Coord l, Coord r) {
+            return new Coord(l.x - r.x, l.y - r.y);
         }
 
         public static bool operator ==(Coord l, Coord r) {

@@ -7,8 +7,10 @@ using MAPF.Utils;
 namespace MAPF {
     public class FreightRobot : RobotEntity {
 
-        private MapUnitEntity[,] gridMap;
         public int priority;
+        public Coord.UnitDirection prevMove = Coord.UnitDirection.ZERO;
+
+        private MapUnitEntity[,] gridMap;
         private Queue<Task> assignedTasks;
 
         public FreightRobot(Coord position_, int priority_) : base(RobotType.FREIGHT, position_) {
@@ -43,10 +45,14 @@ namespace MAPF {
             MapUnitEntity[,] gridMapWithRobot = this.gridMap.Clone() as MapUnitEntity[,];
             List<FreightRobot> neighbors = GetNeighborRobots();
             if (neighbors.Count >= 4) {
+                prevMove = Coord.UnitDirection.ZERO;
+                MoveToAdjacent(this.position);
                 return; //just return and stay at current position
             } else {
                 foreach(FreightRobot neighbor in neighbors) {
                     if (neighbor.position == currentTask.targetPos) {
+                        prevMove = Coord.UnitDirection.ZERO;
+                        MoveToAdjacent(this.position);
                         return; //just return and stay at current position
                     }
                     gridMapWithRobot[neighbor.position.x, neighbor.position.y] = new MapUnitEntity(MapUnitEntity.MapUnitType.BARRIER);
@@ -65,12 +71,14 @@ namespace MAPF {
             if (path == null) {
                 Debug.LogWarning(string.Format("[FreightRobot] A star path planning failed, start{0} to target{1}",
                     this.position.ToString(), currentTask.targetPos.ToString()));
+                prevMove = Coord.UnitDirection.ZERO;
+                MoveToAdjacent(this.position);
                 return; //stay at current position
             }
             Coord nextStep = (path.Count == 0) ? this.position : path[0];
-
-            // actual move
+            prevMove = Coord.DeltaCoord2UnitDirection(nextStep - this.position);
             MoveToAdjacent(nextStep);
+            //Debug.Log($"<color=#00FF00>" + "[FreightRobot] prevMove = </color>" + prevMove.ToString());
         }
 
         private List<FreightRobot> GetNeighborRobots() {
