@@ -65,6 +65,9 @@ namespace MAPF {
 
             /*------------- get local heatmap -------------*/
             float[,] localHeatmap = GlobalGrid._instance.globalHeatmap.Clone() as float[,];
+            // exclude heat caused by this robot it self (T-Shape)
+            //TODO
+
             switch (config._localHeatmapAlgorithm) {
                 case SimulationConfig.LocalHM.Naive:
                     _LoopThroughEachSlot(localHeatmap, _DerivateLocalHeatmap_Naive);

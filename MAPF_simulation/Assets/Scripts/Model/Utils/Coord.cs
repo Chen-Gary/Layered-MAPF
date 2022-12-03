@@ -63,6 +63,14 @@ namespace MAPF.Utils {
             return new Coord(l.x - r.x, l.y - r.y);
         }
 
+        public static Coord operator *(Coord coord, int scalar) {
+            return new Coord(coord.x * scalar, coord.y * scalar);
+        }
+
+        public static Coord operator *(int scalar, Coord coord) {
+            return new Coord(coord.x * scalar, coord.y * scalar);
+        }
+
         public static bool operator ==(Coord l, Coord r) {
             return (l.x == r.x) && (l.y == r.y);
         }
@@ -85,6 +93,18 @@ namespace MAPF.Utils {
         public static int ManhattanDistance(Coord l, Coord r) {
             int manhattanDistance = Mathf.Abs(l.x - r.x) + Mathf.Abs(l.y - r.y);
             return manhattanDistance;
+        }
+
+        public static bool IsOnAxisAndPerpendicular(Coord l, Coord r) {
+            bool case1 = l.x == 0 && l.y != 0 && r.x != 0 && r.y == 0;
+            bool case2 = l.x != 0 && l.y == 0 && r.x == 0 && r.y != 0;
+            return case1 || case2;
+        }
+
+        public static bool IsOnAxisAndPerpendicular(UnitDirection d1, UnitDirection d2) {
+            Coord l = UnitDirection2DeltaCoord(d1);
+            Coord r = UnitDirection2DeltaCoord(d2);
+            return IsOnAxisAndPerpendicular(l, r);
         }
 
         public override string ToString() {

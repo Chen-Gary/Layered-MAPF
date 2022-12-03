@@ -85,6 +85,9 @@ namespace MAPF {
                 case SimulationConfig.GlobalHM.Naive:
                     _UpdateHeatmapByLoopingRobots(_UpdateHeatmap_Naive);
                     break;
+                case SimulationConfig.GlobalHM.TShape:
+                    _UpdateHeatmapByLoopingRobots(_UpdateHeatmap_TShape);
+                    break;
                 default:
                     Debug.LogError("[GlobalGrid] invalid _globalHeatmapAlgorithm");
                     break;
@@ -130,8 +133,37 @@ namespace MAPF {
             globalHeatmap[baseCoord.x, baseCoord.y] += config._Naive_weight;
         }
         
-        private void _UpdateHeatmap_TShape() {
-            //TODO
+        private void _UpdateHeatmap_TShape(FreightRobot robot) {
+            Coord.UnitDirection prevMove = robot.prevMove;
+
+            // if no move in last step, use Naive algorithm
+            if (prevMove == Coord.UnitDirection.ZERO) {
+                _UpdateHeatmap_Naive(robot);
+                return;
+            }
+
+            // T-Shape
+            Coord.UnitDirection[] directions = new Coord.UnitDirection[] {
+                Coord.UnitDirection.LEFT, Coord.UnitDirection.RIGHT, 
+                Coord.UnitDirection.UP, Coord.UnitDirection.DOWN
+            };
+            foreach (Coord.UnitDirection direction in directions) {
+                Coord deltaCoord = Coord.UnitDirection2DeltaCoord(direction);
+                if (prevMove == direction) {
+                    for (int i = 0; i <= 3; i++) {
+                        _IncrementGlobalHeatmapIfPossible(robot.position + i* deltaCoord, 6f);
+                    }
+                } else if (Coord.IsOnAxisAndPerpendicular(prevMove, direction)) {
+                    _IncrementGlobalHeatmapIfPossible(robot.position + deltaCoord, 3f);
+                }
+            }
+        }
+
+        private void _IncrementGlobalHeatmapIfPossible(Coord idx, float amount) {
+            if (idx.x >= 0 && idx.x < globalHeatmap.GetLength(0) &&
+                idx.y >= 0 && idx.y < globalHeatmap.GetLength(1)) {
+                globalHeatmap[idx.x, idx.y] += amount;
+            }
         }
         #endregion
 
