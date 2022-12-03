@@ -7,22 +7,26 @@ using MAPF.View;
 
 namespace MAPF { 
     public class SimulationEntry : MonoBehaviour {
+        [Header("Config")]
         [SerializeField]
         private bool _needGraphics = true;
+        [SerializeField]
+        private float _delayBetweenPasses = 1f;
 
+        [Header("Static Reference")]
         [SerializeField]
         private UIInfoManager _uiInfoManager = null;
         [SerializeField]
         private GlobalGridView _globalGridView = null;
 
+        [Header("Files to Load")]
         [SerializeField]
         private string _mapJsonFileName = null;
         [SerializeField]
         private string _robotJsonFileName = null;
         [SerializeField]
         private string _taskSetJsonFileName = null;
-        [SerializeField]
-        private float _delayBetweenPasses = 1f;
+        
 
         private int m_currentTimeStamp = 0;
 
