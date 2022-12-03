@@ -6,3 +6,19 @@
 
 /task_set/*.json
 /task_set/*.json.meta
+
+
+# let git track the following files
+
+!/csv/Bot_76_48.*
+!/csv/Bot1.*
+!/csv/Map_76_48.*
+!/csv/Map1.*
+
+!/json/Bot_76_48.*
+!/json/Bot1.*
+!/json/Map_76_48.*
+!/json/Map1.*
+
+!/task_set/Task_76_48.*
+!/task_set/Task1.*
