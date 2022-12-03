@@ -17,6 +17,9 @@ namespace MAPF {
         }
         #endregion
 
+        [SerializeField]
+        private string _comment = null;
+
         [Header("Graphic Config")]
         public bool _needGraphics = true;
         public float _delayBetweenPasses = 1f;
@@ -32,5 +35,11 @@ namespace MAPF {
 
         [Header("Local Heatmap Config")]
         public LocalHM _localHeatmapAlgorithm = LocalHM.Naive;
+
+
+        private void foo() {
+            // just to get rid of warning
+            Debug.Log("[SimulationConfig] just to get rid of warning: " + _comment);
+        }
     }
 }
