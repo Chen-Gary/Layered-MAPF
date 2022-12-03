@@ -129,7 +129,7 @@ namespace MAPF {
             }
 
             // update local position
-            this.position = nextPos;
+            //this.position = nextPos;  //let the cloud server do this
 
             // check if current task finished
             if (assignedTasks.Count > 0) {

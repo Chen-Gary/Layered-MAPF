@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -71,14 +72,15 @@ namespace MAPF {
             // update `gridRobot`
             gridRobot[currentPos.x, currentPos.y] = gridRobot[nextPos.x, nextPos.y];    //set current position to NONE
             gridRobot[nextPos.x, nextPos.y] = robot;
+            robot.position = nextPos;
 
             // update global heatmap
             switch(config._globalHeatmapAlgorithm) {
                 case SimulationConfig.GlobalHM.NoHeatmap:
-                    _UpdateHeatmap_NoHeatmap();
+                    _UpdateHeatmapByLoopingRobots(_UpdateHeatmap_NoHeatmap);
                     break;
                 case SimulationConfig.GlobalHM.Naive:
-                    _UpdateHeatmap_Naive(config._Naive_weight);
+                    _UpdateHeatmapByLoopingRobots(_UpdateHeatmap_Naive);
                     break;
                 default:
                     Debug.LogError("[GlobalGrid] invalid _globalHeatmapAlgorithm");
@@ -99,19 +101,34 @@ namespace MAPF {
         #endregion
 
         #region Heatmap
-        private void _UpdateHeatmap_NoHeatmap() {
+        private void _UpdateHeatmapByLoopingRobots(Action<FreightRobot> func) {
             this.globalHeatmap = new float[dimX, dimY];  //automatically init to all 0
-        }
 
-        private void _UpdateHeatmap_Naive(float weight) {
-            this.globalHeatmap = new float[dimX, dimY];  //automatically init to all 0
             for (int x = 0; x < dimX; x++) {
                 for (int y = 0; y < dimY; y++) {
                     if (gridRobot[x, y].type == RobotEntity.RobotType.FREIGHT) {
-                        globalHeatmap[x, y] += weight;
+                        //error check
+                        if (gridRobot[x, y].position != new Coord(x, y)) {
+                            Debug.LogError(string.Format("[GlobalGrid] inconsistency in robot pos {0} and its index found {1}",
+                                gridRobot[x, y].position.ToString(), new Coord(x, y).ToString()));
+                            return;
+                        }
+                        func((FreightRobot)gridRobot[x, y]);
                     }
                 }
             }
+        }
+        private void _UpdateHeatmap_NoHeatmap(FreightRobot robot) {
+            return;
+        }
+
+        private void _UpdateHeatmap_Naive(FreightRobot robot) {
+            Coord baseCoord = robot.position;
+            globalHeatmap[baseCoord.x, baseCoord.y] += config._Naive_weight;
+        }
+        
+        private void _UpdateHeatmap_TShape() {
+            //TODO
         }
         #endregion
 
