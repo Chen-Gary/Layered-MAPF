@@ -33,6 +33,7 @@ namespace MAPF {
         public int dimY = 0;
 
         private Queue<Task> GlobalTaskQueue;
+        private int finishedTaskCount = 0;
         private SimulationConfig config;
 
         public GlobalGrid() {
@@ -204,8 +205,19 @@ namespace MAPF {
                 nextTask = GlobalTaskQueue.Dequeue();
                 UIInfoManager.instance.UILog/*Debug.Log*/(string.Format("[GlobalGrid] task={0} is assigned to robot, {1} tasks left to be assigned", 
                     nextTask.targetPos.ToString(), GlobalTaskQueue.Count.ToString()));
+
+                // update UI
+                UIInfoManager.instance.RenderTaskInfo(GlobalTaskQueue.Count, finishedTaskCount);
+
                 return true;
             }
+        }
+
+        public void ReportTaskCompletion() {
+            finishedTaskCount++;
+
+            // update UI
+            UIInfoManager.instance.RenderTaskInfo(GlobalTaskQueue.Count, finishedTaskCount);
         }
         #endregion
 
@@ -307,6 +319,9 @@ namespace MAPF {
 
             Debug.Log(string.Format("[GlobalGrid] json map loaded with dimension [dimX, dimY] = [{0}, {1}]", 
                 dimX.ToString(), dimY.ToString()));
+
+            // update UI
+            UIInfoManager.instance.RenderMapSize(dimX, dimY);
         }
 
         public void PopulateRobotWithJson(string filename) {
@@ -327,6 +342,9 @@ namespace MAPF {
                 robotPriority++;
             }
             Debug.Log("[GlobalGrid] robots init with json successfully");
+
+            // update UI
+            UIInfoManager.instance.RenderRobotCount(arrOfPos.Length);
         }
 
         public void PopulateTaskQueueWithJson(string filename) {
@@ -350,6 +368,9 @@ namespace MAPF {
                 GlobalTaskQueue.Enqueue(new Task(task[0], task[1]));
             }
             Debug.Log(string.Format("[GlobalGrid] global task queue init with json successfully, total task count = {0}", arrOfTask.Length));
+
+            // update UI
+            UIInfoManager.instance.RenderTotalTaskCount(arrOfTask.Length);
         }
         #endregion
     }

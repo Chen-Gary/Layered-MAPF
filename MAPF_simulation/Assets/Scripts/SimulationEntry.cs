@@ -29,7 +29,7 @@ namespace MAPF {
         private bool _OneSimulationPass() {
             m_currentTimeStamp++;
             if (_config._needGraphics) 
-                _uiInfoManager.Render(m_currentTimeStamp);
+                _uiInfoManager.RenderTimeStamp(m_currentTimeStamp);
 
             // for all robot
             bool globalTerminationFlag = true;
@@ -102,7 +102,7 @@ namespace MAPF {
 
             // render
             _globalGridView.Render(m_globalGrid);
-            _uiInfoManager.Render(m_currentTimeStamp);
+            _uiInfoManager.RenderTimeStamp(m_currentTimeStamp);
         }
 
         private void Update() {

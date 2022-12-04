@@ -144,6 +144,7 @@ namespace MAPF {
                 Task currentTask = assignedTasks.Peek();
                 if (currentTask.targetPos == this.position) {
                     assignedTasks.Dequeue();
+                    GlobalGrid._instance.ReportTaskCompletion();
                     UIInfoManager.instance.UILog/*Debug.Log*/(string.Format("[FreightRobot] local task finished, targetPos={0}", this.position.ToString()));
                 }
             }

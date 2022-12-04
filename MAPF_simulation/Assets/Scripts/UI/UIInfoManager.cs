@@ -18,15 +18,46 @@ namespace MAPF.UI {
         private ScrollRect _logScrollRect = null;
         [SerializeField]
         private TextMeshProUGUI _logText = null;
+        [SerializeField]
+        private TextMeshProUGUI _robotCount = null;
+        [SerializeField]
+        private TextMeshProUGUI _mapSize = null;
+        [SerializeField]
+        private TextMeshProUGUI _totalTaskCount = null;
+        [SerializeField]
+        private TextMeshProUGUI _notAssignedTaskCount = null;
+        [SerializeField]
+        private TextMeshProUGUI _runningTaskCount = null;
+        [SerializeField]
+        private TextMeshProUGUI _finishedTaskCount = null;
 
-        public void Render(int updatedTimeStamp) {
-            // view
-            _timeStampText.text = _FormatTimeStamp(updatedTimeStamp);
-        }
+        private int bufTotalTaskCount = 0;
 
-        private string _FormatTimeStamp(int currentTimeStamp) {
-            return string.Format("Time Stamp: {0}", currentTimeStamp.ToString());
+        #region Render Repeatedly
+        public void RenderTimeStamp(int updatedTimeStamp) {
+            _timeStampText.text = string.Format("Time Stamp: {0}", updatedTimeStamp.ToString());
         }
+        public void RenderTaskInfo(int notAssignedTaskCount, int finishedTaskCount) {
+            int runningTaskCount = bufTotalTaskCount - notAssignedTaskCount - finishedTaskCount;
+
+            _notAssignedTaskCount.text = string.Format("Tasks to be Assigned: {0}", notAssignedTaskCount.ToString());
+            _runningTaskCount.text = string.Format("Tasks Under Execution: {0}", runningTaskCount.ToString());
+            _finishedTaskCount.text = string.Format("Tasks Finished: {0}", finishedTaskCount.ToString());
+        }
+        #endregion
+
+        #region Render Only Once
+        public void RenderMapSize(int dimX, int dimY) {
+            _mapSize.text = string.Format("Map Size: {0} x {1}", dimX.ToString(), dimY.ToString());
+        }
+        public void RenderRobotCount(int count) {
+            _robotCount.text = string.Format("Robot Number: {0}", count.ToString());
+        }
+        public void RenderTotalTaskCount(int count) {
+            this.bufTotalTaskCount = count;
+            _totalTaskCount.text = string.Format("Total Task Number: {0}", count.ToString());
+        }
+        #endregion
 
         #region UI Log
         public void UILog(string msg) {
