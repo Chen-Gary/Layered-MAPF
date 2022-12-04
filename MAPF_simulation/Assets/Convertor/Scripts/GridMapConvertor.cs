@@ -3,11 +3,14 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using Newtonsoft.Json;
 
 
 namespace MAPF.Convertor {
+#if UNITY_EDITOR
     [CreateAssetMenu(menuName = "MAPF/Convertor/GridMapConvertor")]
     public class GridMapConvertor : ScriptableObject {
         [SerializeField]
@@ -83,4 +86,5 @@ namespace MAPF.Convertor {
             }
         }
     }
+#endif
 }
