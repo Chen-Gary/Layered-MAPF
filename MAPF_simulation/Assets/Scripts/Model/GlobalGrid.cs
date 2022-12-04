@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using MAPF.Utils;
+using MAPF.UI;
 
 
 namespace MAPF {
@@ -201,7 +202,7 @@ namespace MAPF {
                 return false;
             } else {
                 nextTask = GlobalTaskQueue.Dequeue();
-                Debug.Log(string.Format("[GlobalGrid] task={0} is assigned to robot, {1} tasks left to be assigned", 
+                UIInfoManager.instance.UILog/*Debug.Log*/(string.Format("[GlobalGrid] task={0} is assigned to robot, {1} tasks left to be assigned", 
                     nextTask.targetPos.ToString(), GlobalTaskQueue.Count.ToString()));
                 return true;
             }

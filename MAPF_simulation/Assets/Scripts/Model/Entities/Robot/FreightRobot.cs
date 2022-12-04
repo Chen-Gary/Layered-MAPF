@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MAPF.Utils;
+using MAPF.UI;
 
 
 namespace MAPF {
@@ -32,7 +33,7 @@ namespace MAPF {
                 if (!GlobalGrid._instance.RequestTask(out newTask)) {
                     isIdle = true;
                     GlobalGrid._instance.RemoveRobot(this);     //idle robot will be removed
-                    Debug.Log(string.Format("[RobotEntity] Robot[{0}] has not more job to perform, so it is removed", priority.ToString()));
+                    UIInfoManager.instance.UILog/*Debug.Log*/(string.Format("[RobotEntity] Robot[{0}] has not more job to perform, so it is removed", priority.ToString()));
                     return;     //return if no more task available
                 }
                 assignedTasks.Enqueue(newTask);
@@ -143,7 +144,7 @@ namespace MAPF {
                 Task currentTask = assignedTasks.Peek();
                 if (currentTask.targetPos == this.position) {
                     assignedTasks.Dequeue();
-                    Debug.Log(string.Format("[FreightRobot] local task finished, targetPos={0}", this.position.ToString()));
+                    UIInfoManager.instance.UILog/*Debug.Log*/(string.Format("[FreightRobot] local task finished, targetPos={0}", this.position.ToString()));
                 }
             }
             
