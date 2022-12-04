@@ -60,10 +60,12 @@ namespace MAPF.UI {
         #endregion
 
         #region UI Log
+        private const int MAX_LOG_LEN = 1200;
+        private const int LOG_LEN_TO_KEEP = 400;
         public void UILog(string msg) {
             //Debug.Log(msg);
 
-            if (_logText.text.Length > 1200) _logText.text = _logText.text.Substring(0, 400);
+            if (_logText.text.Length > MAX_LOG_LEN) _logText.text = _logText.text.Substring(0, LOG_LEN_TO_KEEP);
             _logText.text = msg + "\n\n" + _logText.text;
             _logScrollRect.verticalNormalizedPosition = 1f;     //keep on top
         }
@@ -71,6 +73,16 @@ namespace MAPF.UI {
         public void UILogSuccess(string msg) {
             msg = "<color=#198754>" + msg + "</color>";
             UILog(msg);
+        }
+
+        public void UILogError(string msg) {
+            Debug.LogError(msg);
+
+            msg = "<color=red>" + msg + "</color>";
+
+            if (_logText.text.Length > MAX_LOG_LEN) _logText.text = _logText.text.Substring(0, LOG_LEN_TO_KEEP);
+            _logText.text = msg + "\n\n" + _logText.text;
+            _logScrollRect.verticalNormalizedPosition = 1f;     //keep on top
         }
         #endregion
 

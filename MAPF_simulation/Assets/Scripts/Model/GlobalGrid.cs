@@ -293,7 +293,7 @@ namespace MAPF {
 
             string path = Path.Combine(Application.dataPath, "Convertor", "json", filename + ".json");
             if (!File.Exists(path)) {
-                Debug.LogError("[GlobalGrid] PopulateWithJson : file not found");
+                UIInfoManager.instance.UILogError/*Debug.LogError*/("[GlobalGrid] PopulateWithJson : file not found");
                 return;
             }
             string gridMapJson = File.ReadAllText(path);
@@ -342,6 +342,10 @@ namespace MAPF {
             }
 
             string path = Path.Combine(Application.dataPath, "Convertor", "json", filename + ".json");
+            if (!File.Exists(path)) {
+                UIInfoManager.instance.UILogError/*Debug.LogError*/("[GlobalGrid] PopulateRobotWithJson : file not found");
+                return;
+            }
             string arrOfPosJson = File.ReadAllText(path);
             int[][] arrOfPos = JsonConvert.DeserializeObject<int[][]>(arrOfPosJson);
 
@@ -367,6 +371,10 @@ namespace MAPF {
             //GlobalTaskQueue.Enqueue(new Task(16, 3));
 
             string path = Path.Combine(Application.dataPath, "Convertor", "task_set", filename + ".json");
+            if (!File.Exists(path)) {
+                UIInfoManager.instance.UILogError/*Debug.LogError*/("[GlobalGrid] PopulateTaskQueueWithJson : file not found");
+                return;
+            }
             string arrOfTaskJson = File.ReadAllText(path);
             int[][] arrOfTask = JsonConvert.DeserializeObject<int[][]>(arrOfTaskJson);
 
