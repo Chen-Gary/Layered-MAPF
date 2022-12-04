@@ -293,7 +293,7 @@ namespace MAPF {
 
             string path = Path.Combine(Application.dataPath, "Convertor", "json", filename + ".json");
             if (!File.Exists(path)) {
-                UIInfoManager.instance.UILogError/*Debug.LogError*/("[GlobalGrid] PopulateWithJson : file not found");
+                UIInfoManager.instance.UILogError/*Debug.LogError*/("[GlobalGrid] PopulateMapWithJson : file not found");
                 return;
             }
             string gridMapJson = File.ReadAllText(path);
@@ -326,7 +326,7 @@ namespace MAPF {
                 }
             }
 
-            Debug.Log(string.Format("[GlobalGrid] json map loaded with dimension [dimX, dimY] = [{0}, {1}]. " +
+            UIInfoManager.instance.UILog/*Debug.Log*/(string.Format("[GlobalGrid] json map loaded with dimension [dimX, dimY] = [{0}, {1}]. " +
                 "Barrier count = {2}; Road count = {3}", 
                 dimX.ToString(), dimY.ToString(), barrierSlotCount.ToString(), roadSlotCount.ToString()));
 
@@ -355,7 +355,7 @@ namespace MAPF {
                 gridRobot[pos[0], pos[1]] = new FreightRobot(new Coord(pos[0], pos[1]), robotPriority);
                 robotPriority++;
             }
-            Debug.Log("[GlobalGrid] robots init with json successfully");
+            UIInfoManager.instance.UILog/*Debug.Log*/("[GlobalGrid] robots init with json successfully");
 
             // update UI
             UIInfoManager.instance.RenderRobotCount(arrOfPos.Length);
@@ -385,7 +385,7 @@ namespace MAPF {
                 }
                 GlobalTaskQueue.Enqueue(new Task(task[0], task[1]));
             }
-            Debug.Log(string.Format("[GlobalGrid] global task queue init with json successfully, total task count = {0}", arrOfTask.Length));
+            UIInfoManager.instance.UILog/*Debug.Log*/(string.Format("[GlobalGrid] global task queue init with json successfully, total task count = {0}", arrOfTask.Length));
 
             // update UI
             UIInfoManager.instance.RenderTotalTaskCount(arrOfTask.Length);

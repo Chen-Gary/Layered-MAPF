@@ -97,7 +97,7 @@ namespace MAPF.UI {
         }
 
         private void Start() {
-            _logText.text = "=== Log Console ===";
+            //_logText.text = "=== Log Console ===";    //this may cause some earlier log being cleared
         }
         #endregion
     }
