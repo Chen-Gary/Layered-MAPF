@@ -59,7 +59,7 @@ namespace MAPF {
                 bool globalTerminated = _OneSimulationPass();
 
                 if (globalTerminated) {
-                    Debug.Log(string.Format("[SimulationEntry] simulation done, total time stamp: {0}", m_currentTimeStamp.ToString()));
+                    UIInfoManager.instance.UILogSuccess/*Debug.Log*/(string.Format("[SimulationEntry] simulation done, total time stamp: {0}", m_currentTimeStamp.ToString()));
                     break;
                 }
             }

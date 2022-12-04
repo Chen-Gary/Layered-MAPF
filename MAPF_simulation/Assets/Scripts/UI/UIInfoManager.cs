@@ -30,11 +30,16 @@ namespace MAPF.UI {
 
         #region UI Log
         public void UILog(string msg) {
-            Debug.Log(msg);
+            //Debug.Log(msg);
 
             if (_logText.text.Length > 1200) _logText.text = _logText.text.Substring(0, 400);
             _logText.text = msg + "\n\n" + _logText.text;
             _logScrollRect.verticalNormalizedPosition = 1f;     //keep on top
+        }
+
+        public void UILogSuccess(string msg) {
+            msg = "<color=#198754>" + msg + "</color>";
+            UILog(msg);
         }
         #endregion
 
@@ -49,7 +54,7 @@ namespace MAPF.UI {
         }
 
         private void Start() {
-            _logText.text = "Log Console: \n";
+            _logText.text = "=== Log Console ===";
         }
         #endregion
     }
