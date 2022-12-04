@@ -54,7 +54,8 @@ namespace MAPF.View {
 
             if (robot.type == RobotEntity.RobotType.FREIGHT) {
                 FreightRobot freightRobot = (FreightRobot)robot;
-                float rgbScale = 1f - (float)(50 * freightRobot.priority % 256) / 256f;
+                float SCALAR = 0.35f;    //limit rgbScale in [1-SCALAR, 1], so the color is lighter
+                float rgbScale = 1f - SCALAR * (float)(50 * freightRobot.priority % 256) / 256f;
                 _freightRobot.color = new Color(rgbScale, rgbScale, rgbScale);
             }
         }
