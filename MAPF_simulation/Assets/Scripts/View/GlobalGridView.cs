@@ -48,7 +48,9 @@ namespace MAPF.View {
 
                     // 2. Render "static" graphic for each `GridEntityView`
                     m_gridEntityViews[x, y]._coordText.text = GridEntityView.FormatCoordText(x, y);
+                    m_gridEntityViews[x, y]._coordText.gameObject.SetActive(SimulationEntry.instance._config._displayCoordinate);
                     m_gridEntityViews[x, y].RenderMap(m_globalGrid.gridMap[x, y].type);
+                    m_gridEntityViews[x, y].Enable3DView(SimulationEntry.instance._config._display3DModel);
                 }
             }
         }

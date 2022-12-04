@@ -22,6 +22,8 @@ namespace MAPF {
 
         [Header("Graphic Config")]
         public bool _needGraphics = true;
+        public bool _displayCoordinate = true;
+        public bool _display3DModel = false;
         public float _delayBetweenPasses = 1f;
 
         [Header("Files to Load")]

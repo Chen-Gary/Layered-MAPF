@@ -30,6 +30,9 @@ namespace MAPF.View {
         private SpriteRenderer _fetchRobot = null;
         [SerializeField]
         private SpriteRenderer _freightRobot = null;
+
+        [SerializeField]
+        private Transform[] _3DObjects = null;
         #endregion
 
         public static string FormatCoordText(int x, int y) {
@@ -42,6 +45,12 @@ namespace MAPF.View {
             _publicRoad.gameObject.SetActive(type == MapUnitEntity.MapUnitType.PUBLIC_ROAD);
             _barrier.gameObject.SetActive(type == MapUnitEntity.MapUnitType.BARRIER);
             _conveyor.gameObject.SetActive(type == MapUnitEntity.MapUnitType.CONVEYOR);
+        }
+
+        public void Enable3DView(bool isEnable) {
+            for (int i = 0; i < _3DObjects.Length; i++) {
+                _3DObjects[i].gameObject.SetActive(isEnable);
+            }
         }
 
         public void RenderRobot(RobotEntity.RobotType type) {

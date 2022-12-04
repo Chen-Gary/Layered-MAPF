@@ -1051,6 +1051,9 @@ MonoBehaviour:
   _conveyor: {fileID: 1865580348}
   _fetchRobot: {fileID: 1937484702}
   _freightRobot: {fileID: 113896444}
+  _3DObjects:
+  - {fileID: 1459438343887570340}
+  - {fileID: 797159234211779909}
 --- !u!1 &6737743269196285532
 GameObject:
   m_ObjectHideFlags: 0
