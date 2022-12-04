@@ -167,7 +167,7 @@ namespace MAPF {
         }
 
         private float _DerivateLocalHeatmap_InverseProportion(Coord robotPos, Coord slotPos, float originalHeat) {
-            float SCALE = 3f;
+            float SCALE = 2f;
             int dist = Coord.ManhattanDistance(robotPos, slotPos);
             float newHeat = originalHeat * (SCALE / (float)dist);
             return newHeat;

@@ -133,9 +133,9 @@ namespace MAPF {
             globalHeatmap[baseCoord.x, baseCoord.y] += config._Naive_weight;
         }
 
-        private int T_SHAPE_LEN = 3;
-        private float T_SHAPE_SCALAR_1 = 4f;
-        private float T_SHAPE_SCALAR_2 = 2f;
+        private int T_SHAPE_LEN = 2;
+        private float T_SHAPE_SCALAR_1 = 2f;
+        private float T_SHAPE_SCALAR_2 = 1f;
         private void _UpdateHeatmap_TShape(FreightRobot robot) {
             Coord.UnitDirection prevMove = robot.prevMove;
 
