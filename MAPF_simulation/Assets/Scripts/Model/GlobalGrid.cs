@@ -34,6 +34,7 @@ namespace MAPF {
 
         private Queue<Task> GlobalTaskQueue;
         private int finishedTaskCount = 0;
+        private int totalDistanceCovered = 0;
         private SimulationConfig config;
 
         public GlobalGrid() {
@@ -94,6 +95,10 @@ namespace MAPF {
                     Debug.LogError("[GlobalGrid] invalid _globalHeatmapAlgorithm");
                     break;
             }
+
+            // update UI
+            totalDistanceCovered += Coord.ManhattanDistance(currentPos, nextPos);
+            UIInfoManager.instance.RenderTotalDistance(totalDistanceCovered);
 
             return true;
         }

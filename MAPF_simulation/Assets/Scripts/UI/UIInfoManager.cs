@@ -15,6 +15,8 @@ namespace MAPF.UI {
         [SerializeField]
         private TextMeshProUGUI _timeStampText = null;
         [SerializeField]
+        private TextMeshProUGUI _totalDistance = null;
+        [SerializeField]
         private ScrollRect _logScrollRect = null;
         [SerializeField]
         private TextMeshProUGUI _logText = null;
@@ -36,6 +38,9 @@ namespace MAPF.UI {
         #region Render Repeatedly
         public void RenderTimeStamp(int updatedTimeStamp) {
             _timeStampText.text = string.Format("Time Stamp: {0}", updatedTimeStamp.ToString());
+        }
+        public void RenderTotalDistance(int totalDistance) {
+            _totalDistance.text = string.Format("Total Distance: {0}", totalDistance.ToString());
         }
         public void RenderTaskInfo(int notAssignedTaskCount, int finishedTaskCount) {
             int runningTaskCount = bufTotalTaskCount - notAssignedTaskCount - finishedTaskCount;
