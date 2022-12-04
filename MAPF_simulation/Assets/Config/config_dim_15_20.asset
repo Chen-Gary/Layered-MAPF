@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _comment: 
   _needGraphics: 1
+  _displayCoordinate: 0
+  _display3DModel: 1
   _delayBetweenPasses: 0.5
   _mapJsonFileName: Map1
   _robotJsonFileName: Bot1

@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4459e9c6ebc757547b3a51cf63bb7183, type: 3}
   m_Name: config_1
   m_EditorClassIdentifier: 
+  _comment: 
   _needGraphics: 1
-  _delayBetweenPasses: 0.01
+  _displayCoordinate: 0
+  _display3DModel: 0
+  _delayBetweenPasses: 0
   _mapJsonFileName: Map_76_48
   _robotJsonFileName: Bot_76_48
   _taskSetJsonFileName: Task_76_48
-  _globalHeatmapAlgorithm: 1
+  _globalHeatmapAlgorithm: 2
   _Naive_weight: 6
-  _localHeatmapAlgorithm: 0
+  _localHeatmapAlgorithm: 2
