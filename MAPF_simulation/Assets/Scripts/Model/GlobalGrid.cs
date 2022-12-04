@@ -288,6 +288,9 @@ namespace MAPF {
         #region Populate Grid with Json
         public void PopulateMapWithJson(string filename) {
 
+            int barrierSlotCount = 0;
+            int roadSlotCount = 0;
+
             string path = Path.Combine(Application.dataPath, "Convertor", "json", filename + ".json");
             if (!File.Exists(path)) {
                 Debug.LogError("[GlobalGrid] PopulateWithJson : file not found");
@@ -314,11 +317,18 @@ namespace MAPF {
                 for (int j = 0; j < dimY; j++) {
                     int entry = gridMapIntArr[i, j];
                     gridMap[i, j].type = int2MapUnitType[entry];
+
+                    // count map info
+                    if (gridMap[i, j].type == MapUnitEntity.MapUnitType.BARRIER)
+                        barrierSlotCount++;
+                    else if (gridMap[i, j].type == MapUnitEntity.MapUnitType.PUBLIC_ROAD)
+                        roadSlotCount++;
                 }
             }
 
-            Debug.Log(string.Format("[GlobalGrid] json map loaded with dimension [dimX, dimY] = [{0}, {1}]", 
-                dimX.ToString(), dimY.ToString()));
+            Debug.Log(string.Format("[GlobalGrid] json map loaded with dimension [dimX, dimY] = [{0}, {1}]. " +
+                "Barrier count = {2}; Road count = {3}", 
+                dimX.ToString(), dimY.ToString(), barrierSlotCount.ToString(), roadSlotCount.ToString()));
 
             // update UI
             UIInfoManager.instance.RenderMapSize(dimX, dimY);
