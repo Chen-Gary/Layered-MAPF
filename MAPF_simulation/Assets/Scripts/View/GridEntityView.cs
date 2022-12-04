@@ -58,6 +58,9 @@ namespace MAPF.View {
             _freightRobot.gameObject.SetActive(type == RobotEntity.RobotType.FREIGHT);
         }
         public void RenderRobot(RobotEntity robot) {
+            // reset
+            _publicRoad.color = Color.white;
+
             _fetchRobot.gameObject.SetActive(robot.type == RobotEntity.RobotType.FETCH);
             _freightRobot.gameObject.SetActive(robot.type == RobotEntity.RobotType.FREIGHT);
 
@@ -67,6 +70,16 @@ namespace MAPF.View {
                 float rgbScale = 1f - SCALAR * (float)(50 * freightRobot.priority % 256) / 256f;
                 _freightRobot.color = new Color(rgbScale, rgbScale, rgbScale);
             }
+        }
+
+        public void RenderHeat(float globalHeatValue) {
+            //reset
+            _fetchRobot.gameObject.SetActive(false);
+            _freightRobot.gameObject.SetActive(false);
+
+            float redScale = globalHeatValue / 8f;
+            redScale = (redScale > 1f) ? 1f : redScale;
+            _publicRoad.color = new Color(1f, 1f - redScale, 1f - redScale);
         }
     }
 }

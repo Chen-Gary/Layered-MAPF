@@ -15,6 +15,10 @@ namespace MAPF {
         public enum LocalHM {
             Naive, InverseProportion, Piecewise
         }
+
+        public enum RenderMode {
+            Robot, Heatmap
+        }
         #endregion
 
         [SerializeField]
@@ -25,6 +29,7 @@ namespace MAPF {
         public bool _displayCoordinate = true;
         public bool _display3DModel = false;
         public float _delayBetweenPasses = 1f;
+        public RenderMode _renderMode = RenderMode.Robot;
 
         [Header("Files to Load")]
         public string _mapJsonFileName = null;

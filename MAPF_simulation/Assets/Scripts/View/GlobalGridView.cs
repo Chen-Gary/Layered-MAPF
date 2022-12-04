@@ -58,8 +58,12 @@ namespace MAPF.View {
         private void _RefreshView() {
             for (int x = 0; x < m_globalGrid.dimX; x++) {
                 for (int y = 0; y < m_globalGrid.dimY; y++) {
-                    //m_gridEntityViews[x, y].RenderRobot(m_globalGrid.gridRobot[x, y].type);
-                    m_gridEntityViews[x, y].RenderRobot(m_globalGrid.gridRobot[x, y]);
+                    if (SimulationEntry.instance._config._renderMode == SimulationConfig.RenderMode.Robot) {
+                        //m_gridEntityViews[x, y].RenderRobot(m_globalGrid.gridRobot[x, y].type);
+                        m_gridEntityViews[x, y].RenderRobot(m_globalGrid.gridRobot[x, y]);
+                    } else {    // SimulationEntry.instance._config._renderMode == SimulationConfig.RenderMode.Heatmap
+                        m_gridEntityViews[x, y].RenderHeat(m_globalGrid.globalHeatmap[x, y]);
+                    }
                 }
             }
         }
