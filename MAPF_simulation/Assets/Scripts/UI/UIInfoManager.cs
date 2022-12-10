@@ -91,6 +91,14 @@ namespace MAPF.UI {
         }
         #endregion
 
+        #region Fullscreen Toggle
+        public void ToggleFullscreen(bool isFullscreenMode) {
+            Screen.fullScreen = isFullscreenMode;
+
+            Debug.Log(string.Format("[UIInfoManager] isFullscreenMode = {0}", isFullscreenMode.ToString()));
+        }
+        #endregion
+
         #region Unity Callbacks
         private void Awake() {
             if (instance != null && instance != this) {
