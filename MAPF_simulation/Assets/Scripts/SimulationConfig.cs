@@ -9,7 +9,7 @@ namespace MAPF {
 
         #region Enum
         public enum GlobalHM {
-            NoHeatmap, Naive, TShape
+            NoHeatmap, Naive, TShape, CircleGaussian
         }
 
         public enum LocalHM {

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -91,8 +92,23 @@ namespace MAPF.Utils {
         }
 
         public static int ManhattanDistance(Coord l, Coord r) {
-            int manhattanDistance = Mathf.Abs(l.x - r.x) + Mathf.Abs(l.y - r.y);
+            int manhattanDistance = Math.Abs(l.x - r.x) + Math.Abs(l.y - r.y);
             return manhattanDistance;
+        }
+
+        public static double EuclideanDistance(Coord l, Coord r) {
+            double differenceX = l.x - r.x;
+            double differenceY = l.y - r.y;
+            double distance = Math.Sqrt(Math.Pow(differenceX, 2) + Math.Pow(differenceY, 2));
+            return distance;
+        }
+
+        public static double GaussianDistribution(double x, double mean = 0, double standard_deviation = 1) {
+            // ref: https://www.probabilitycourse.com/chapter4/4_2_3_normal.php
+            //      https://en.wikipedia.org/wiki/Normal_distribution
+            double power = -0.5 * Math.Pow( (x-mean)/standard_deviation, 2);
+            double pdf = 1 / (standard_deviation * Math.Sqrt(2 * Math.PI)) * Math.Exp(power);
+            return pdf;
         }
 
         public static bool IsOnAxisAndPerpendicular(Coord l, Coord r) {

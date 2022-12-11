@@ -71,6 +71,8 @@ namespace MAPF {
             // exclude heat caused by this robot itself (T-Shape)
             if (config._globalHeatmapAlgorithm == SimulationConfig.GlobalHM.TShape) {
                 GlobalGrid._instance.TShapeExcludeSelf(this, localHeatmap);
+            } else if (config._globalHeatmapAlgorithm == SimulationConfig.GlobalHM.CircleGaussian) {
+                GlobalGrid._instance.CircleGaussianExcludeSelf(this, localHeatmap);
             }
 
             switch (config._localHeatmapAlgorithm) {

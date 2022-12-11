@@ -91,6 +91,9 @@ namespace MAPF {
                 case SimulationConfig.GlobalHM.TShape:
                     _UpdateHeatmapByLoopingRobots(_UpdateHeatmap_TShape);
                     break;
+                case SimulationConfig.GlobalHM.CircleGaussian:
+                    _UpdateHeatmapByLoopingRobots(_UpdateHeatmap_CircleGaussian);
+                    break;
                 default:
                     Debug.LogError("[GlobalGrid] invalid _globalHeatmapAlgorithm");
                     break;
@@ -168,7 +171,6 @@ namespace MAPF {
                 }
             }
         }
-
         public void TShapeExcludeSelf(FreightRobot robot, float[,] localHeatmap) {
             Coord.UnitDirection prevMove = robot.prevMove;
 
@@ -189,6 +191,42 @@ namespace MAPF {
                     }
                 } else if (Coord.IsOnAxisAndPerpendicular(prevMove, direction)) {
                     _IncrementHeatmapIfPossible(localHeatmap, robot.position + deltaCoord, -T_SHAPE_SCALAR_2);
+                }
+            }
+        }
+
+
+        private int CIRCLE_RADIUS = 4;
+        private double GAUSSIAN_SCALAR = 4;
+        public void _UpdateHeatmap_CircleGaussian(FreightRobot robot) {
+            int startX = robot.position.x - CIRCLE_RADIUS;
+            int startY = robot.position.y - CIRCLE_RADIUS;
+
+            int circle_diameter = 2 * CIRCLE_RADIUS;
+            for (int i = 0; i <= circle_diameter; i++) {
+                for (int j = 0; j <= circle_diameter; j++) {
+                    Coord currentCoord = new Coord(startX + i, startY + j);
+                    double euclideanDistance = Coord.EuclideanDistance(currentCoord, robot.position);
+                    if (euclideanDistance <= CIRCLE_RADIUS) {
+                        double heat = GAUSSIAN_SCALAR * Coord.GaussianDistribution(euclideanDistance, 0, 1);
+                        _IncrementHeatmapIfPossible(this.globalHeatmap, currentCoord, (float)heat);
+                    }   
+                }
+            }
+        }
+        public void CircleGaussianExcludeSelf(FreightRobot robot, float[,] localHeatmap) {
+            int startX = robot.position.x - CIRCLE_RADIUS;
+            int startY = robot.position.y - CIRCLE_RADIUS;
+
+            int circle_diameter = 2 * CIRCLE_RADIUS;
+            for (int i = 0; i <= circle_diameter; i++) {
+                for (int j = 0; j <= circle_diameter; j++) {
+                    Coord currentCoord = new Coord(startX + i, startY + j);
+                    double euclideanDistance = Coord.EuclideanDistance(currentCoord, robot.position);
+                    if (euclideanDistance <= CIRCLE_RADIUS) {
+                        double heat = GAUSSIAN_SCALAR * Coord.GaussianDistribution(euclideanDistance, 0, 1);
+                        _IncrementHeatmapIfPossible(localHeatmap, currentCoord, -(float)heat);
+                    }
                 }
             }
         }
