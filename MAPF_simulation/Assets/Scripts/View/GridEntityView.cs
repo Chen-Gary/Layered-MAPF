@@ -72,10 +72,11 @@ namespace MAPF.View {
             }
         }
 
-        public void RenderHeat(float globalHeatValue) {
+        public void RenderHeat(RobotEntity robot, float globalHeatValue) {
             //reset
-            _fetchRobot.gameObject.SetActive(false);
-            _freightRobot.gameObject.SetActive(false);
+            //_fetchRobot.gameObject.SetActive(false);
+            //_freightRobot.gameObject.SetActive(false);
+            RenderRobot(robot.type);
 
             float redScale = globalHeatValue / 8f;
             redScale = (redScale > 1f) ? 1f : redScale;

@@ -62,7 +62,7 @@ namespace MAPF.View {
                         //m_gridEntityViews[x, y].RenderRobot(m_globalGrid.gridRobot[x, y].type);
                         m_gridEntityViews[x, y].RenderRobot(m_globalGrid.gridRobot[x, y]);
                     } else {    // SimulationEntry.instance._config._renderMode == SimulationConfig.RenderMode.Heatmap
-                        m_gridEntityViews[x, y].RenderHeat(m_globalGrid.globalHeatmap[x, y]);
+                        m_gridEntityViews[x, y].RenderHeat(m_globalGrid.gridRobot[x, y], m_globalGrid.globalHeatmap[x, y]);
                     }
                 }
             }
