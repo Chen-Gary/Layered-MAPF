@@ -197,7 +197,7 @@ namespace MAPF {
 
 
         private int CIRCLE_RADIUS = 4;
-        private double GAUSSIAN_SCALAR = 4;
+        private double GAUSSIAN_SCALAR = 5;     //The app will crash if this value is >= 6. I do not know why.
         public void _UpdateHeatmap_CircleGaussian(FreightRobot robot) {
             int startX = robot.position.x - CIRCLE_RADIUS;
             int startY = robot.position.y - CIRCLE_RADIUS;
