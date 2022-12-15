@@ -10,6 +10,42 @@ Simulation platform of a Layered Approach for Multi-Agent Path Finding (MAPF).
 
 ## 2. Demo
 
+* **2D Simulation View**
+
+  ![](README_img/demo1/2d_view.png)
+
+* **3D Simulation View**
+
+  ![](README_img/demo1/3d_view.png)
+
+* **Heat Map Visualizer**
+
+  * Heat Map using T-Shape Generation Algorithm
+
+    ![](README_img/demo1/heatmap_visualizer_TShape.png)
+
+  * Heat Map using Circle-Gaussian Generation Algorithm
+
+    ![](README_img/demo1/heatmap_visualizer_CircleGaussian.png)
+
+* **Map Editor**
+
+  Edit grid map with MS Excel and save as `csv` files.
+
+  ![](README_img/demo1/map_editor.png)
+
+* **Map Converter**
+
+  Convert `csv` maps (including robot arrangements) to `json` files. The simulation program will read `json` files at runtime before the simulation begins.
+
+  ![](README_img/demo1/map_converter.png)
+
+* **Random Task Generator**
+
+  Generate random tasks given the `json` maps and corresponding robot arrangements.
+
+  ![](README_img/demo1/task_generator.png)
+
 
 
 ## 3. Algorithm Architecture
