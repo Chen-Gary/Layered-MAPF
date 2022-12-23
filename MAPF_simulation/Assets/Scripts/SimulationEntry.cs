@@ -19,7 +19,8 @@ namespace MAPF {
 
         public static SimulationEntry instance;     //singleton
 
-        private int m_currentTimeStamp = 0;
+        private int m_currentTimeStamp = 0;         //iteration count
+        private long m_currentTotalComputationTime = 0;
 
         private GlobalGrid m_globalGrid;
 
@@ -28,6 +29,8 @@ namespace MAPF {
 
         private bool _OneSimulationPass() {
             m_currentTimeStamp++;
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+
             if (_config._needGraphics) 
                 _uiInfoManager.RenderTimeStamp(m_currentTimeStamp);
 
@@ -46,6 +49,9 @@ namespace MAPF {
                 if (!isCurrentRobotIdle) globalTerminationFlag = false;
             }
 
+            watch.Stop();
+            m_currentTotalComputationTime += watch.ElapsedMilliseconds;
+
             // rerender view
             if (_config._needGraphics)
                 _globalGridView.Render(m_globalGrid);
@@ -54,26 +60,39 @@ namespace MAPF {
         }
 
         private IEnumerator _SimulationLoopCoroutine() {
+            _ResetEvaluationMetrics();
+
             while (m_keepSimulation) {
                 yield return new WaitForSeconds(_config._delayBetweenPasses);
                 bool globalTerminated = _OneSimulationPass();
 
                 if (globalTerminated) {
-                    UIInfoManager.instance.UILogSuccess/*Debug.Log*/(string.Format("[SimulationEntry] simulation done, total time stamp: {0}", m_currentTimeStamp.ToString()));
+                    long computationTimePerIteration = m_currentTotalComputationTime / m_currentTimeStamp;
+                    UIInfoManager.instance.UILogSuccess/*Debug.Log*/(string.Format("[SimulationEntry] simulation done, total time stamp: {0}, computation time per iteration: {1}ms",
+                        m_currentTimeStamp.ToString(), computationTimePerIteration.ToString()));
                     break;
                 }
             }
         }
 
         private void _SimulationLoop() {
+            _ResetEvaluationMetrics();
+
             while (m_keepSimulation) {
                 bool globalTerminated = _OneSimulationPass();
 
                 if (globalTerminated) {
-                    Debug.Log(string.Format("[SimulationEntry] simulation done, total time stamp: {0}", m_currentTimeStamp.ToString()));
+                    long computationTimePerIteration = m_currentTotalComputationTime / m_currentTimeStamp;
+                    Debug.Log(string.Format("[SimulationEntry] simulation done, total time stamp: {0}, computation time per iteration: {1}ms",
+                        m_currentTimeStamp.ToString(), computationTimePerIteration.ToString()));
                     break;
                 }
             }
+        }
+
+        private void _ResetEvaluationMetrics() {
+            m_currentTimeStamp = 0;
+            m_currentTotalComputationTime = 0;
         }
 
         public void StartSimulation() {
