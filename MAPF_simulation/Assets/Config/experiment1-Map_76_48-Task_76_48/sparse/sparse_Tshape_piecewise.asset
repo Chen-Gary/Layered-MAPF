@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4459e9c6ebc757547b3a51cf63bb7183, type: 3}
+  m_Name: sparse_Tshape_piecewise
+  m_EditorClassIdentifier: 
+  _comment: 776, 22001, 58ms
+  _needGraphics: 1
+  _displayCoordinate: 0
+  _display3DModel: 0
+  _delayBetweenPasses: 0
+  _renderMode: 1
+  _mapJsonFileName: Map_76_48
+  _robotJsonFileName: Bot_76_48_sparse
+  _taskSetJsonFileName: Task_76_48
+  _globalHeatmapAlgorithm: 2
+  _Naive_weight: 6
+  _localHeatmapAlgorithm: 2
