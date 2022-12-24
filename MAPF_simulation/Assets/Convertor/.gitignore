@@ -11,11 +11,15 @@
 # let git track the following files
 
 !/csv/Bot_76_48.*
+!/csv/Bot_76_48_sparse.*
+!/csv/Bot_76_48_dense.*
 !/csv/Bot1.*
 !/csv/Map_76_48.*
 !/csv/Map1.*
 
 !/json/Bot_76_48.*
+!/json/Bot_76_48_sparse.*
+!/json/Bot_76_48_dense.*
 !/json/Bot1.*
 !/json/Map_76_48.*
 !/json/Map1.*
