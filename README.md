@@ -10,6 +10,8 @@ Simulation platform of a Layered Approach for Multi-Agent Path Finding (MAPF).
 
 ## 2. Demo
 
+Demo videos can be found following this link: https://www.bilibili.com/video/BV1KG4y1n76b/
+
 * **2D Simulation View**
 
   ![](README_img/demo1/2d_view.png)
