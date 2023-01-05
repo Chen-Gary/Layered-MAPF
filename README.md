@@ -95,3 +95,5 @@ Online Scheduling Phase: Two-level A* algorithm guided by **heat maps**
 ## 4. Environment
 
 * Unity 2019.4.5f1
+
+Please check the [wiki](https://github.com/Chen-Gary/Layered-MAPF/wiki) to see how to use this program.
